@@ -1,0 +1,12 @@
+form,
+h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+input {
+  margin: 8px;
+  width: 40%;
+}
