@@ -11,6 +11,13 @@
             text-align: center;
             background: green;
         }
+
+        qwe {
+            /* flex */
+            display: inline-block;
+            margin: 12px;
+            padding: 12px;
+        }
     </style>
 </head>
 
@@ -18,16 +25,35 @@
     <p id="pTag">let use DOM</p>
     <button id="manageStyle" class="classButton">Add/Remove Style</button>
     <!-- <script src="./app.js"></script> -->
-    <br><br>
+    <br>
+    <hr><br>
 
     <input type="text" name="" id="input">
     <button id="get">GET</button>
+    <br>
+    <hr><br>
 
     <qwe>
         <!-- name age and password -->
+        <label for="name">Name: </label>
         <input type="text" name="name" id="name">
+        <br>
+        <label for="age">Age: </label>
         <input type="text" name="age" id="age">
+        <br>
+        <label for="password">Password: </label>
         <input type="password" name="password" id="password">
+        <!-- select, radio, etc. -->
+        <br>
+        <label for="select">Select: </label>
+        <select name="select" id="select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <br>
+        <label for="checkbox">Hello???</label>
+        <input type="checkbox" name="Hello?" id="checkbox">
         <button id="submit">Submit</button>
     </qwe>
     <script src="./dom.js"></script>
