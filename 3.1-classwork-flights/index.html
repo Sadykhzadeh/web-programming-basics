@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <label for="direction">Direction: </label>
+  <select required name="Direction" id="direction">
+    <option value="100">Baku (100)</option>
+    <option value="200">London (200)</option>
+    <option value="200">Paris (200)</option>
+    <option value="150">Moscow (150)</option>
+  </select>
+  <br>
+  <label for="isRoundWay">Is Round Way: </label>
+  <input type="checkbox" name="isRoundWay" id="isRoundWay" required value="1">
+  <br>
+  <label for="passengers">Passengers: </label>
+  <input required type="number" name="passengers" id="passengers">
+  <br>
+  <label for="child">Child age: </label>
+  <input required type="number" name="child" id="child">
+  <br>
+  <div id="result"></div>
+  <script src="./script.js"></script>
+</body>
+
+</html>
