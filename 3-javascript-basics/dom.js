@@ -33,7 +33,7 @@ const getFormData = () => {
     password = document.getElementById("password").value,
     select = document.getElementById("select").value,
     checkbox = document.getElementById("checkbox").checked;
-  
+
   const formData = {
     name,
     email,
