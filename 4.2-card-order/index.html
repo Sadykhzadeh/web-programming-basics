@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="">
+    <h1>ORDER CARD</h1>
+    <label for="type">Type:</label>
+    <select name="type" id="type" required>
+      <option value="Visa-100">Visa</option>
+      <option value="Mastercard-100">Mastercard</option>
+      <option value="American Express-200">American Express</option>
+    </select>
+    <span>and: </span>
+    <input type="radio" name="card" id="classic" value="Classic-10" required>
+    <label for="classic">Classic</label>
+    <input type="radio" name="card" id="gold" value="Gold-15" required>
+    <label for="gold">Gold</label>
+    <input type="radio" name="card" id="platinum" value="Platinum-20" required>
+    <label for="platinum">Platinum</label>
+    <br><br>
+    <span>Extra</span>
+    <input type="checkbox" name="extra" id="cashback" value="Cashback-50">
+    <label for="cashback">Cashback</label>
+    <input type="checkbox" name="extra" id="ApplePay" value="ApplePay-30">
+    <label for="ApplePay">ApplePay</label>
+    <br><br>
+    <label for="name">Name:</label>
+    <input type="text" required name="name" id="name">
+    <br><br>
+    <label for="surname">Surname:</label>
+    <input type="text" required name="surname" id="surname">
+    <br><br>
+    <span id="result"></span>
+  </form>
+  <script src="script.js"></script>
+</body>
+
+</html>
