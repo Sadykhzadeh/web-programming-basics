@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john_doe@johndoe.com",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "12345",
+    "country": "USA",
+    "created_at": "2019-01-01 00:00:00",
+    "updated_at": "2019-01-01 00:00:00"
+  },
+  {
+    "id": 2,
+    "name": "Jane Doe",
+    "email": "john_doe@johndoe.com",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "12345",
+    "country": "USA",
+    "created_at": "2019-01-01 00:00:00",
+    "updated_at": "2019-01-01 00:00:00"
+  },
+  {
+    "id": 3,
+    "name": "John Smith",
+    "email": "john_doe@johndoe.com",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "12345",
+    "country": "USA",
+    "created_at": "2019-01-01 00:00:00",
+    "updated_at": "2019-01-01 00:00:00"
+  }
+]
