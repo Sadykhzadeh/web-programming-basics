@@ -1,0 +1,35 @@
+body {
+  background-color: #f0f0f0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+.flag {
+  float: left;
+  margin-right: 10%;
+}
+
+input,
+select {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  outline: none;
+}
+
+.country {
+  width: 49%;
+  display: flexbox;
+  float: left;
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
