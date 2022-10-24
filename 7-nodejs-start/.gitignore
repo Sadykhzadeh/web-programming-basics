@@ -1,0 +1,4 @@
+node_modules/
+
+#macOS dump files
+.DS_Store
