@@ -1,5 +1,5 @@
 {
-  "name": "24-10-22-web",
+  "name": "8-nodejs-start",
   "version": "1.0.0",
   "scripts": {
     "1": "node 1-http.js",
