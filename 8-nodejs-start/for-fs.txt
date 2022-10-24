@@ -1,0 +1,5 @@
+Hello, World!
+My name is Azer.
+And my surname is Sadykhzadeh.
+Omg how many liiiiiiiines!!!!!11!
+Here is some data to write to the file.
