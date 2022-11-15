@@ -1,0 +1,22 @@
+{
+  "name": "12-simple-session-auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "a": "npm run build && npm start"
+  },
+  "author": "Azer Sadykhzadeh <azer.one>",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/express-session": "^1.17.5"
+  }
+}
