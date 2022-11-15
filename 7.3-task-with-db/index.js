@@ -3,7 +3,7 @@ import { createConnection } from "mysql2/promise";
 
 const app = express();
 
-app.get("/", async (req, res) => {
+app.get("/", async (__req, res) => {
   const connection = await createConnection({
     host: "localhost",
     user: "root",
@@ -11,7 +11,7 @@ app.get("/", async (req, res) => {
     database: "Animals",
   });
 
-  const [rows, fields] = await connection.execute("SELECT * FROM `Animals`");
+  const [rows] = await connection.execute("SELECT * FROM `Animals`");
   const animals = rows.map((row) => row.name);
 
   res.send(`
