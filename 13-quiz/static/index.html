@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Records</title>
+
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: sans-serif;
+    }
+
+    .result {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    input {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .objectBox {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h2>Enter the number of records to be generated</h2>
+  <input type="number" name="number" id="number" value="2" placeholder="Enter number of records" />
+  <button onclick="qButton(2)">2</button>
+  <button onclick="qButton(2)">2</button>
+  <button onclick="qButton(10)">10</button>
+  <button onclick="qButton(20)">20</button>
+  <button onclick="qButton(50)">50</button>
+  <button onclick="qButton(100)">100</button>
+  <div id="result"></div>
+</body>
+
+<script>
+  const qButton = (value) => {
+    document.getElementById('number').value = value;
+    q();
+  }
+
+  const q = () => {
+    const number = document.querySelector('#number').value;
+    const result = document.querySelector('#result');
+    result.innerHTML = "";
+    fetch(`/request?limit=${number}`)
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(item => {
+          result.innerHTML += `<div class="objectBox">
+            <h2>Name: ${item.name}</h1>
+            <h4>Location: ${item.location}</h2>
+            <a href="${item.multiMedia[0].url}">Link</a>
+            <p>Likes: ${item.likeDislike.likes}</p>
+            <p>Dislikes: ${item.likeDislike.dislikes}</p>
+          </div>`;
+        })
+      })
+      .catch(err => console.log(err))
+  };
+
+  document.getElementById('number').addEventListener('change', q);
+
+  // to run the function on page load
+  q();
+</script>
+
+</html>
