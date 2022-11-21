@@ -1,0 +1,22 @@
+{
+  "name": "13.1-quiz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node .",
+    "a": "npm run build && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3"
+  }
+}

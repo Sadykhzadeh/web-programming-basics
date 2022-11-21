@@ -1,0 +1,8 @@
+version - 2
+ - Use tables products and suppliers from (dbms lab)
+ - create simple navigation (suppliers list, insert page)  [-1]
+ - Try to list the complete list of suppliers  [-1]
+ - When clicking each supplier (use GET method), display products (line by line) by this supplier [-1]
+ - Create a form which will insert a record to products table:
+	- get suppliers name dynamically (from database), use drop down list to display them  [-1]
+	- after submission, display success message in 3 minutes, then refer to main page, OR display warning message (all fields should be filled out!)  [-1]
