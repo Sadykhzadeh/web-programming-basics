@@ -29,14 +29,14 @@ document.getElementById("get").addEventListener("click", qwe);
 // get form data
 const getFormData = () => {
   const name = document.getElementById("name").value,
-    email = document.getElementById("age").value,
+    age = document.getElementById("age").value,
     password = document.getElementById("password").value,
     select = document.getElementById("select").value,
     checkbox = document.getElementById("checkbox").checked;
 
   const formData = {
     name,
-    email,
+    age,
     password,
     select,
     checkbox,
