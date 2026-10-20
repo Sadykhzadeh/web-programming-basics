@@ -2,6 +2,7 @@ import express from "express";
 import session from "express-session";
 import dotenv from "dotenv";
 import path from "path";
+import { randomBytes } from "crypto";
 import { exec } from "child_process";
 
 dotenv.config();
@@ -25,11 +26,17 @@ declare module "express-session" {
   }
 }
 
+// Without SESSION_SECRET in .env a random one is used, so sessions
+// just do not survive a restart. Never fall back to a fixed string.
 app.use(session({
-  secret: process.env.SESSION_SECRET || "secret",
+  secret: process.env.SESSION_SECRET || randomBytes(32).toString("hex"),
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true, // not readable from document.cookie
+    sameSite: "lax", // not sent with cross-site POSTs
+    secure: false, // set to true when served over HTTPS
+  },
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,9 +52,12 @@ app.get('/login', (q, res) => {
 
 app.post('/auth', (q, res) => {
   const { username, password } = q.body;
-  if (password === 'azer') {
-    q.session.user = { username };
-    res.redirect('/');
+  if (typeof username === 'string' && username.length > 0 && username.length <= 50 && password === 'azer') {
+    // new session id after login, so an id set before it is useless
+    q.session.regenerate(() => {
+      q.session.user = { username };
+      res.redirect('/');
+    });
   } else {
     res.redirect('/login');
   }
