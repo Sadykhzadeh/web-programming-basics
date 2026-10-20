@@ -17,5 +17,18 @@ used for "Web Programming and Security".
 - [6th week (Classwork): Continents](https://sadykhzadeh.github.io/web-programming-basics/6.2-classwork-continents)
 - [7th week: Node.JS Start](https://github.com/sadykhzadeh/web-programming-basics/tree/master/7-nodejs-start)
 - [7th week: (Classwork)](https://github.com/sadykhzadeh/web-programming-basics/tree/master/7.2-task)
+- [7th week: (Classwork with DB)](https://github.com/sadykhzadeh/web-programming-basics/tree/master/7.3-task-with-db)
 - [8th week: Node.JS Express](https://github.com/sadykhzadeh/web-programming-basics/tree/master/8-express)
 - [12th week: Simple Session Auth](https://github.com/sadykhzadeh/web-programming-basics/tree/master/12-simple-session-auth)
+- [13th week: Quiz](https://github.com/sadykhzadeh/web-programming-basics/tree/master/13-quiz)
+- [13th week: Quiz (with DB)](https://github.com/sadykhzadeh/web-programming-basics/tree/master/13.1-quiz)
+
+## Running the Node examples
+
+Needs Node.js 18 or newer. In each Node folder (`7.2-task`, `7.3-task-with-db`,
+`8-express`, `12-simple-session-auth`, `13-quiz`, `13.1-quiz`) run
+`npm install`, then `npm start`. `7-nodejs-start` runs its examples by number
+(`npm run 1` ... `npm run 8`). The TypeScript folders
+(`12`, `13`, `13.1`) need `npm run build` before `npm start`, and the ones with
+a database (`7.3`, `13.1`) need MySQL set up first. See the README in each
+folder.
