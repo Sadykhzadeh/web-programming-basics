@@ -1,35 +1,49 @@
 import express from "express";
 import fs from "fs";
 
-import { returnConnection } from './connectDB';
+import { pool } from './connectDB';
 
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("/api/suppliers", async (req, res) => {
-  const connection = await returnConnection();
-  
-  const [rows] = await connection.execute("SELECT * FROM suppliers");
+// report a failed query instead of crashing the process
+const handle = (fn) => (req, res) =>
+  fn(req, res).catch((error) => {
+    console.error(error.message);
+    res.status(500).send({ message: "Database error" });
+  });
+
+app.get("/api/suppliers", handle(async (req, res) => {
+  const [rows] = await pool.execute("SELECT * FROM suppliers");
 
   res.send(rows);
-});
+}));
 
-app.get("/api/suppliers/:id", async (req, res) => {
-  const connection = await returnConnection();
-  
-  const [rows] = await connection.query("SELECT * FROM products WHERE supplierID = ?", [req.params.id]);
+app.get("/api/suppliers/:id", handle(async (req, res) => {
+  const [rows] = await pool.query("SELECT * FROM products WHERE supplierID = ?", [req.params.id]);
 
   res.send(rows);
-});
+}));
 
-app.post("/api/suppliers", async (req, res) => {
-  const connection = await returnConnection();
+app.post("/api/suppliers", handle(async (req, res) => {
   const { productCode, name, price, quantity, supplierID } = req.body;
-  const [rows] = await connection.query("INSERT INTO products (productCode, name, price, quantity, supplierID) VALUES (?, ?, ?, ?, ?)", [productCode, name, price, quantity, supplierID]);
+
+  // all fields are required (see task.txt), match the column types of db.sql
+  const valid =
+    typeof productCode === "string" && productCode.length === 3 &&
+    typeof name === "string" && name.trim() !== "" && name.length <= 30 &&
+    price !== "" && Number(price) >= 0 && Number(price) < 100000 &&
+    quantity !== "" && Number.isInteger(Number(quantity)) && Number(quantity) >= 0 &&
+    Number.isInteger(Number(supplierID)) && Number(supplierID) > 0;
+  if (!valid) {
+    res.status(400).send({ message: "All fields should be filled out!" });
+    return;
+  }
+
+  const [rows] = await pool.query("INSERT INTO products (productCode, name, price, quantity, supplierID) VALUES (?, ?, ?, ?, ?)", [productCode, name, price, quantity, supplierID]);
   res.send(rows);
-});
-  
+}));
 
 app.get('/', (req, res) => {
   res.send(fs.readFileSync('./public/index.html', 'utf8'));

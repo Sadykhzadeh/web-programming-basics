@@ -1,3 +1,9 @@
+const escapeHtml = (text) => {
+  const el = document.createElement('div');
+  el.textContent = text;
+  return el.innerHTML;
+};
+
 const getAllSuppliers = async () => {
   const response = await fetch('/api/suppliers');
   const data = await response.json();
@@ -8,7 +14,7 @@ const selectLoading = async () => {
   const suppliers = await getAllSuppliers();
   const supplierElement = document.getElementById('supplier');
   supplierElement.innerHTML = suppliers.map(supplier => `
-    <option value="${supplier.supplierID}">${supplier.name}</option>
+    <option value="${supplier.supplierID}">${escapeHtml(supplier.name)}</option>
   `).join('');
 }
 
@@ -26,7 +32,6 @@ const submitForm = async (event) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'mode': 'no-cors',
     },
     body: JSON.stringify({
       productCode,
@@ -38,11 +43,11 @@ const submitForm = async (event) => {
   });
 
   const data = await response.json();
-  if (!data.warningStatus) {
+  if (response.ok && !data.warningStatus) {
     alert("Product added successfully");
     window.location.href = '/';
   } else {
-    alert("Error adding product");
+    alert(data.message || "Error adding product");
   }
 }
 
