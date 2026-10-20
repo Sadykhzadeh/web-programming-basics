@@ -9,8 +9,14 @@ const workWithData = (e) => {
   const extra = Array.from(
     document.querySelectorAll("input[type=checkbox]:checked"),
   );
-  const name = document.querySelector("#name").value;
-  const surname = document.querySelector("#surname").value;
+  // typed by the user, so escape it before it goes into innerHTML
+  const escapeHtml = (text) => {
+    const el = document.createElement("div");
+    el.textContent = text;
+    return el.innerHTML;
+  };
+  const name = escapeHtml(document.querySelector("#name").value);
+  const surname = escapeHtml(document.querySelector("#surname").value);
 
   result.innerHTML = `
     <h2>Order</h2>
