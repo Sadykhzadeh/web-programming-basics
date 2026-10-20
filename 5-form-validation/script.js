@@ -19,7 +19,7 @@ submitButton.onclick = () => {
 
 const validateUsername = () => {
   const uname = document.getElementById("uname").value;
-  if (uname.length >= 3 || uname.length < 20) {
+  if (uname.length >= 3 && uname.length <= 20) {
     console.log("Username is accepted.");
   } else {
     unameInfo.innerHTML =
@@ -29,7 +29,7 @@ const validateUsername = () => {
 
 const validatePassword = {
   validateLength: () => {
-    if (pass.value.length >= 8 || pass.value.length < 16) {
+    if (pass.value.length >= 8 && pass.value.length <= 16) {
       console.log("Password length is accepted.");
     } else {
       passInfo.innerHTML +=
@@ -58,10 +58,9 @@ const validatePassword = {
   },
 
   validateNumbers: () => {
-    if (pass.value.split("").map(Number).filter(Boolean).length > 0) {
+    if (/[0-9]/.test(pass.value)) {
       console.log("Password has a number.");
     } else {
-      console.log(pass.value.split("").map(Number));
       passInfo.innerHTML += "\nPassword must contain at least one number!";
     }
   },
