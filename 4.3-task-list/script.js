@@ -17,9 +17,12 @@ const renderList = () => {
   list.innerHTML = `<h3>Total tasks: ${data.length}</h3>`;
   data.forEach((item, x) => {
     const ul = document.createElement("ul");
-    ul.innerHTML =
-      "<button style='margin-right: 5%;' class='delete'>Delete task</button>" +
-      item;
+    const deleteButton = document.createElement("button");
+    deleteButton.style.marginRight = "5%";
+    deleteButton.className = "delete";
+    deleteButton.textContent = "Delete task";
+    // the task text is typed by the user, so it must not be parsed as HTML
+    ul.append(deleteButton, item);
     ul.setAttribute("data-index", x);
     list.appendChild(ul);
   });
