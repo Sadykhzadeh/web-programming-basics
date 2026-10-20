@@ -54,8 +54,22 @@ const realTimeScript = `<script>
         }
       </script>`;
 
-const server = http.createServer((__req, res) => {
-  grabData();
+// API data ends up in HTML, so escape it
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+const server = http.createServer(async (__req, res) => {
+  // wait for the file to be written before reading it back
+  try {
+    await grabData();
+  } catch (error) {
+    console.error(error.message);
+  }
   res.writeHead(200, { "Content-Type": "text/html" });
   // style table
   res.write(`<h1>Users</h1>${style}${readlTimeInput}`);
@@ -68,7 +82,7 @@ const server = http.createServer((__req, res) => {
   // print data to the HTTP response
   users.forEach((user) => {
     res.write(
-      `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.username}</td><td>${user.email}</td></tr>`,
+      `<tr><td>${escapeHtml(user.id)}</td><td>${escapeHtml(user.name)}</td><td>${escapeHtml(user.username)}</td><td>${escapeHtml(user.email)}</td></tr>`,
     );
   });
   res.write(`</table>${realTimeScript}`);
