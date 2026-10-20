@@ -1,5 +1,5 @@
 {
-  "name": "8-nodejs-start",
+  "name": "7-nodejs-start",
   "version": "1.0.0",
   "scripts": {
     "1": "node 1-http.js",
