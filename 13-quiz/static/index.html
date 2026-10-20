@@ -63,6 +63,13 @@
     q();
   }
 
+  // names and locations are user-entered text, keep them out of the markup
+  const esc = (text) => {
+    const el = document.createElement('div');
+    el.textContent = text;
+    return el.innerHTML;
+  };
+
   const q = () => {
     const number = document.querySelector('#number').value;
     const result = document.querySelector('#result');
@@ -72,8 +79,8 @@
       .then(data => {
         data.forEach(item => {
           result.innerHTML += `<div class="objectBox">
-            <h2>Name: ${item.name}</h1>
-            <h4>Location: ${item.location}</h2>
+            <h2>Name: ${esc(item.name)}</h2>
+            <h4>Location: ${esc(item.location)}</h4>
             <a href="${item.multiMedia[0].url}">Link</a>
             <p>Likes: ${item.likeDislike.likes}</p>
             <p>Dislikes: ${item.likeDislike.dislikes}</p>
