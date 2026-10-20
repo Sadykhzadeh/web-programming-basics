@@ -1,9 +1,9 @@
 // basic fetching from API
-import http from "http";
+import https from "https";
 
-const url = "http://jsonplaceholder.typicode.com/posts/2";
+const url = "https://jsonplaceholder.typicode.com/posts/2";
 
-http.get(url, (res) => {
+https.get(url, (res) => {
   let data = "";
   res.on("data", (chunk) => {
     data += chunk;
