@@ -26,7 +26,7 @@ values
     ('Maggie', 7, 'dog', 'Maggie is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
     ('Sophie', 8, 'dog', 'Sophie is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
     ('Chloe', 9, 'dog', 'Chloe is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
-    ('Bailey', 10, 'dog', 'Bailey is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb=350'),
+    ('Bailey', 10, 'dog', 'Bailey is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
     ('Max', 11, 'dog', 'Max is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
     ('Charlie', 12, 'dog', 'Charlie is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
     ('Milo', 13, 'dog', 'Milo is a very friendly dog', 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350'),
