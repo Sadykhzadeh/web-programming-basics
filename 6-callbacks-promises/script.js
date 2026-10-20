@@ -78,14 +78,16 @@ const getPosts = async () => {
 
 // Async/await
 
-const createPosts = async ({ title, body }) => {
-  setTimeout(() => {
-    posts.push({
-      title,
-      body,
-    });
-  }, 1000);
-};
+const createPosts = ({ title, body }) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      posts.push({
+        title,
+        body,
+      });
+      resolve();
+    }, 1000);
+  });
 
 const fetchDataFromInternet = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/todos");
@@ -98,7 +100,7 @@ const fetchDataFromInternet = async () => {
     );
     // console.log(q);
   } else {
-    pasteContent("error");
+    pasteContent("fromInternet", "Could not load data.");
   }
 };
 
