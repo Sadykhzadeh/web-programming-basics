@@ -19,6 +19,12 @@ const fetchDataFromInternet = async (subregion) => {
   );
   const data = await res.json();
 
+  // the API answers with an object instead of a list when something is wrong
+  if (!res.ok || !Array.isArray(data)) {
+    displayInPage("Could not load countries.");
+    return;
+  }
+
   let HTMLContent = "";
 
   data.forEach((country) => {
