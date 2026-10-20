@@ -19,9 +19,9 @@ const getFormData = () => {
     <p>Direction: ${directionValue}</p>
     <p>Is one way: ${isRoundValue ? "Yes" : "No"}</p>
     <p>Passengers: ${passengersValue}</p>
-    <p>Child age: ${childValue} ${((childValue <= 2)
+    <p>Child age: ${childValue} ${((childValue < 2)
     ? "Free"
-    : (childValue > 2 && childValue <= 7)
+    : (childValue >= 2 && childValue <= 7)
     ? "Half-price"
     : "Full-price")}</p>
     <p>Result: ${result}</p>
