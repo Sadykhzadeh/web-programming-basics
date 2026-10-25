@@ -11,7 +11,7 @@ const port = 3000;
 //   `);
 // });
 
-app.use(express.static("views"));
+app.use(express.static("public"));
 
 // view engine
 app.set("view engine", "hbs");
