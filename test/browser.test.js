@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { loadPage } from "./helpers.js";
+import { readFileSync } from "node:fs";
+import { loadPage, root } from "./helpers.js";
 
 test("4-table-objects-target: a button shows its table", async () => {
   const { window } = await loadPage("4-table-objects-target");
@@ -153,5 +154,56 @@ test("6-callbacks-promises: a failed request shows a message", async () => {
   document.getElementById("btn3").click();
   await until(() => document.getElementById("contentFetch").textContent !== "");
   assert.equal(document.getElementById("contentFetch").textContent, "Could not load data.");
+  window.close();
+});
+
+const localFetch = (lesson) => async (url) => {
+  const file = new URL(url, `file://${root}/${lesson}/`);
+  try {
+    const body = readFileSync(file, "utf8");
+    return { ok: true, status: 200, json: async () => JSON.parse(body) };
+  } catch {
+    return { ok: false, status: 404, json: async () => ({}) };
+  }
+};
+
+const pick = async (window, continent) => {
+  const select = window.document.getElementById("continents");
+  select.value = continent;
+  select.dispatchEvent(new window.Event("change"));
+  await until(() => !window.document.getElementById("content").textContent.includes("Loading"));
+};
+
+test("6.2-classwork-continents: every continent lists its countries", async () => {
+  const { window } = await loadPage("6.2-classwork-continents", (window) => {
+    window.fetch = localFetch("6.2-classwork-continents");
+  });
+  const { document } = window;
+  const names = () =>
+    [...document.querySelectorAll("#content .country h2")].map((h) => h.textContent);
+
+  await pick(window, "Europe");
+  assert.ok(names().includes("Germany"));
+  assert.ok(!names().includes("Japan"));
+
+  await pick(window, "South America");
+  assert.ok(names().includes("Brazil"));
+
+  // no capital, no area for some of these: they must not break the page
+  await pick(window, "Antarctica");
+  assert.ok(names().includes("Antarctica"));
+  assert.match(document.getElementById("content").textContent, /Capital: none/);
+
+  await pick(window, "nothing");
+  assert.match(document.getElementById("content").textContent, /Please select/);
+  window.close();
+});
+
+test("6.2-classwork-continents: a missing data file shows a message", async () => {
+  const { window } = await loadPage("6.2-classwork-continents", (window) => {
+    window.fetch = async () => ({ ok: false, status: 404 });
+  });
+  await pick(window, "Asia");
+  assert.equal(window.document.getElementById("content").textContent, "Could not load countries.");
   window.close();
 });
