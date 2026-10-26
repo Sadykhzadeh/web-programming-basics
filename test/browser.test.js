@@ -255,3 +255,27 @@ test("13.1-quiz: the pages say so when the API fails", async () => {
   assert.equal(add.window.document.getElementById("supplier").textContent, "Could not load the suppliers.");
   add.window.close();
 });
+
+test("4.2-card-order: the order summary adds up and the name is escaped", async () => {
+  const { window } = await loadPage("4.2-card-order");
+  const { document } = window;
+  const change = (id, props) => {
+    const el = document.getElementById(id);
+    Object.assign(el, props);
+    el.dispatchEvent(new window.Event("change"));
+  };
+
+  change("type", { value: "American Express-200" });
+  change("gold", { checked: true });
+  change("cashback", { checked: true });
+  change("ApplePay", { checked: true });
+  change("name", { value: "<b>Azer</b>" });
+  change("surname", { value: "S" });
+
+  const result = document.getElementById("result");
+  assert.match(result.textContent, /TOTAL: \$295/);
+  assert.equal(result.querySelector("b > b"), null);
+  assert.match(result.textContent, /Name: <b>Azer<\/b> S/);
+  // block content (heading, list, paragraphs) cannot live inside a span
+  assert.equal(result.tagName, "DIV");
+});
