@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { randomBytes } from "crypto";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const app: express.Application = express();
 
