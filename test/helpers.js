@@ -9,9 +9,10 @@ import { JSDOM } from "jsdom";
 export const root = fileURLToPath(new URL("..", import.meta.url));
 
 // Opens <lesson>/index.html with its scripts running, like a browser would.
-// `beforeParse` can add things jsdom does not have, such as fetch.
-export const loadPage = async (lesson, beforeParse = () => {}) => {
-  const dom = await JSDOM.fromFile(join(root, lesson, "index.html"), {
+// `beforeParse` can add things jsdom does not have, such as fetch; `file` is
+// the page inside the lesson folder.
+export const loadPage = async (lesson, beforeParse = () => {}, file = "index.html") => {
+  const dom = await JSDOM.fromFile(join(root, lesson, file), {
     runScripts: "dangerously",
     resources: "usable",
     pretendToBeVisual: true,

@@ -67,8 +67,13 @@
   const esc = (text) => {
     const el = document.createElement('div');
     el.textContent = text;
-    return el.innerHTML;
+    return el.innerHTML.replace(/"/g, '&quot;');
   };
+
+  // most records have null, a path on a server we do not have or embed code
+  // instead of a web address, and only an address makes a usable link
+  const link = (url) =>
+    /^https?:\/\//.test(url) ? `<a href="${esc(url)}">Link</a>` : '';
 
   const q = () => {
     const number = document.querySelector('#number').value;
@@ -81,7 +86,7 @@
           result.innerHTML += `<div class="objectBox">
             <h2>Name: ${esc(item.name)}</h2>
             <h4>Location: ${esc(item.location)}</h4>
-            <a href="${item.multiMedia[0].url}">Link</a>
+            ${link(item.multiMedia[0].url)}
             <p>Likes: ${item.likeDislike.likes}</p>
             <p>Dislikes: ${item.likeDislike.dislikes}</p>
           </div>`;
