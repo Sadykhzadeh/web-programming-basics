@@ -37,7 +37,11 @@ test("12-simple-session-auth: visitors are sent to the login page", async () => 
 
   const login = await request("/login");
   assert.equal(login.status, 200);
-  assert.match(await login.text(), /<form class="form" action="\/auth"/);
+  const page = await login.text();
+  assert.match(page, /<form class="form" action="\/auth"/);
+  assert.match(page, /<html lang="en">/);
+  assert.match(page, /<label for="username">/);
+  assert.match(page, /<label for="password">/);
 });
 
 test("12-simple-session-auth: a wrong password does not sign in", async () => {
