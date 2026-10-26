@@ -98,3 +98,8 @@ export const build = (lesson) =>
     [join(root, lesson, "node_modules/typescript/bin/tsc")],
     { cwd: join(root, lesson) },
   );
+
+// What to pass as `skip` in a test that needs MySQL: a reason when there is no
+// server, unless REQUIRE_MYSQL is set (CI), where a missing server must fail.
+export const noMysql = async () =>
+  !(await mysqlUp()) && !process.env.REQUIRE_MYSQL && "no MySQL on localhost:3306";

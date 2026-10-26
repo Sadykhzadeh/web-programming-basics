@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { mysqlUp, root, startServer } from "./helpers.js";
+import { noMysql, root, startServer } from "./helpers.js";
 
 const lesson = "7.3-task-with-db";
 const password = process.env.DB_PASSWORD || "password";
-const skip = !(await mysqlUp()) && "no MySQL on localhost:3306";
+const skip = await noMysql();
 
 // mysql2 is a dependency of the lesson, not of the repository root
 const { createConnection } = createRequire(join(root, lesson, "/"))("mysql2/promise");

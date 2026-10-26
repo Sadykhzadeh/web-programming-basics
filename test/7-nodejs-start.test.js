@@ -5,7 +5,7 @@ import { cp, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
-import { mysqlUp, root, startServer } from "./helpers.js";
+import { noMysql, root, startServer } from "./helpers.js";
 
 const lesson = "7-nodejs-start";
 const run = promisify(execFile);
@@ -53,7 +53,7 @@ test("7-nodejs-start: the offline examples run", async () => {
 test("7-nodejs-start: 1-http also works when started from another directory", () =>
   serves({ cwd: "." }));
 
-test("7-nodejs-start: 6-mysql lists the customers and then exits", { skip: !(await mysqlUp()) && "no MySQL on localhost:3306", timeout: 20000 }, async () => {
+test("7-nodejs-start: 6-mysql lists the customers and then exits", { skip: await noMysql(), timeout: 20000 }, async () => {
   const { stdout } = await run(process.execPath, ["6-mysql.js"], {
     cwd: join(root, lesson),
     env: { ...process.env, DB_PASSWORD: process.env.DB_PASSWORD || "password" },
