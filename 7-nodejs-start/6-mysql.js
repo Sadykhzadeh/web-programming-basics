@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 
 // to connect to mysql database you need to add access credentials
 // ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
