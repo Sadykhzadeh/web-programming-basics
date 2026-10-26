@@ -224,7 +224,7 @@ test("13-quiz: only real web addresses become links", async () => {
     feed('quote " breaker', 'https://example.com/" onmouseover="alert(1)'),
   ];
   const { window } = await loadPage("13-quiz", (window) => {
-    window.fetch = async () => ({ json: async () => records });
+    window.fetch = async () => ({ ok: true, json: async () => records });
   }, "static/index.html");
   const { document } = window;
 
@@ -375,5 +375,15 @@ test("13-quiz: the number field has a label and the records are announced", asyn
   const { document } = window;
   assert.equal(document.querySelector('label[for="number"]').textContent, "Number of records");
   assert.equal(document.getElementById("result").getAttribute("aria-live"), "polite");
+  window.close();
+});
+
+test("13-quiz: a rejected request shows a message instead of an empty page", async () => {
+  const { window } = await loadPage("13-quiz", (window) => {
+    window.fetch = async () => ({ ok: false, status: 400, json: async () => ({ error: "limit must be a whole number" }) });
+  }, "static/index.html");
+  const result = window.document.getElementById("result");
+  await until(() => result.textContent !== "");
+  assert.equal(result.textContent, "Could not load the records.");
   window.close();
 });

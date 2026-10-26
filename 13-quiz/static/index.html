@@ -80,7 +80,10 @@
     const result = document.querySelector('#result');
     result.innerHTML = "";
     fetch(`/request?limit=${number}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`/request: ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         data.forEach(item => {
           result.innerHTML += `<div class="objectBox">
@@ -92,7 +95,10 @@
           </div>`;
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.error(err);
+        result.textContent = 'Could not load the records.';
+      })
   };
 
   document.getElementById('number').addEventListener('change', q);
