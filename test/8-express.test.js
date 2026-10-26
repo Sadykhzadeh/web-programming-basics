@@ -33,3 +33,11 @@ test("8-express: public files are served, templates are not", async () => {
     assert.equal((await get(leaked)).status, 404, leaked);
   }
 });
+
+test("8-express: unknown pages answer 404 whatever the method", async () => {
+  for (const init of [{}, { method: "POST" }]) {
+    const res = await get("/nope", init);
+    assert.equal(res.status, 404);
+    assert.match(await res.text(), /Page not found/);
+  }
+});
