@@ -11,8 +11,12 @@ import http from "http";
 import fs from "fs";
 import axios from "axios";
 
+// the API address and the port can be overridden, handy for trying it offline
+const usersUrl = process.env.USERS_URL ||
+  "https://jsonplaceholder.typicode.com/users";
+
 const grabData = async () => {
-  const response = await axios("https://jsonplaceholder.typicode.com/users");
+  const response = await axios(usersUrl);
   fs.writeFileSync(
     "users.json",
     JSON.stringify(response.data, null, 2) + "\n",
@@ -92,6 +96,7 @@ const server = http.createServer(async (__req, res) => {
   res.end();
 });
 
-server.listen(3000, () => {
-  console.log("Server is running on port 3000");
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
