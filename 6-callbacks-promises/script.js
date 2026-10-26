@@ -100,7 +100,7 @@ const fetchDataFromInternet = async () => {
     pasteContent(
       "fromInternet",
       q.filter((x, i) => i < 20).map((x) => `${x.id} ${x.title}<br>`)
-        .toString(),
+        .join(""),
     );
     // console.log(q);
   } else {
