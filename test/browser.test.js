@@ -57,3 +57,20 @@ test("4.3-task-list: tasks are list items that can be added and deleted", async 
   assert.equal(items().length, 8);
   assert.match(document.querySelector("#tasks h3").textContent, /Total tasks: 8/);
 });
+
+test("3.2-classwork-flights: the summary names the round way box correctly", async () => {
+  const { window } = await loadPage("3.2-classwork-flights");
+  const { document } = window;
+  const change = (id, props) => {
+    const el = document.getElementById(id);
+    Object.assign(el, props);
+    el.dispatchEvent(new window.Event("change"));
+  };
+
+  change("passengers", { value: "2" });
+  change("child", { value: "5" });
+  assert.match(document.getElementById("result").textContent, /Is round way: No/);
+
+  change("isRoundWay", { checked: true });
+  assert.match(document.getElementById("result").textContent, /Is round way: Yes/);
+});
