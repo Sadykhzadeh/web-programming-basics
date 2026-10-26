@@ -13,7 +13,10 @@ import axios from "axios";
 
 const grabData = async () => {
   const response = await axios("https://jsonplaceholder.typicode.com/users");
-  fs.writeFileSync("users.json", JSON.stringify(response.data, null, 2));
+  fs.writeFileSync(
+    "users.json",
+    JSON.stringify(response.data, null, 2) + "\n",
+  );
 };
 
 const style = `<style>
