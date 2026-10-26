@@ -3,7 +3,6 @@ import session from "express-session";
 import dotenv from "dotenv";
 import path from "path";
 import { randomBytes } from "crypto";
-import { exec } from "child_process";
 
 dotenv.config();
 
@@ -83,5 +82,4 @@ app.listen(port, () => {
   const url = `http://localhost:${port}`
 
   console.log(`Server started! Ready at ${url}`);
-  exec(`open ${url}`);
 });
