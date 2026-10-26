@@ -11,7 +11,7 @@ const data = [
 
 const list = document.getElementById("tasks"),
   input = document.getElementById("task"),
-  button = document.getElementById("but");
+  form = document.getElementById("taskForm");
 
 const renderList = () => {
   list.innerHTML = `<h3>Total tasks: ${data.length}</h3>`;
@@ -37,11 +37,9 @@ const deleteTask = (e) => {
   renderList();
 };
 
-input.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") button.click();
-});
-
-button.addEventListener("click", () => {
+// a form submits on Enter as well as on the button, no key handling needed
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
   const value = input.value;
   if (value) {
     data.push(value);

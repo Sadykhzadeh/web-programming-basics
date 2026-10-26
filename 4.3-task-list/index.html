@@ -11,10 +11,12 @@
 <body>
   <div id="container">
     <h2>Task List App</h2>
-    <label for="task">Task</label>
-    <input type="text" id="task" placeholder="Enter Task">
-    <button type="submit" id="but">Add Task</button>
-    <div id="tasks"></div>
+    <form id="taskForm">
+      <label for="task">Task</label>
+      <input type="text" id="task" placeholder="Enter Task">
+      <button type="submit" id="but">Add Task</button>
+    </form>
+    <div id="tasks" aria-live="polite"></div>
   </div>
   <script src="script.js"></script>
 </body>
