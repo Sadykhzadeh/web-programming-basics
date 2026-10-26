@@ -333,3 +333,11 @@ test("4.3-task-list: submitting the form adds the task, like Enter does", async 
   assert.equal(document.getElementById("task").value, "");
   window.close();
 });
+
+test("4.3-task-list: every delete button names its task", async () => {
+  const { window } = await loadPage("4.3-task-list");
+  const labels = [...window.document.querySelectorAll("button.delete")].map((b) => b.getAttribute("aria-label"));
+  assert.equal(labels[0], "Delete task: Morning walk");
+  assert.equal(new Set(labels).size, labels.length - 1); // "Work" is in the list twice
+  window.close();
+});

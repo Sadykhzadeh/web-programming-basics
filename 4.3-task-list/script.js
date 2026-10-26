@@ -22,6 +22,7 @@ const renderList = () => {
     deleteButton.style.marginRight = "5%";
     deleteButton.className = "delete";
     deleteButton.textContent = "Delete task";
+    deleteButton.setAttribute("aria-label", `Delete task: ${item}`);
     // the task text is typed by the user, so it must not be parsed as HTML
     li.append(deleteButton, item);
     li.setAttribute("data-index", x);
