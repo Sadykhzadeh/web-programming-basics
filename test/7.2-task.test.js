@@ -85,3 +85,8 @@ test("7.2-task: a broken users.json answers 500 and the server keeps running", a
   writeFileSync(usersFile, original);
   assert.equal((await fetch(server.base)).status, 200);
 });
+
+test("7.2-task: the page says it is UTF-8", async () => {
+  const res = await fetch(server.base);
+  assert.match(res.headers.get("content-type"), /charset=utf-8/i);
+});
