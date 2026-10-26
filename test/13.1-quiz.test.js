@@ -107,3 +107,21 @@ test("13.1-quiz: a supplier that does not exist is a 400, not a server error", {
   assert.equal(res.status, 400);
   assert.match(body.message, /supplier/i);
 });
+
+// runs everywhere, the other tests need a database
+test("13.1-quiz: pages load and the API answers 500 without a usable database", async () => {
+  await build(lesson);
+  const lonely = await startServer(lesson, ["dist/index.js"], {
+    env: { DB_PASSWORD: "not-the-password" },
+  });
+  try {
+    for (const path of ["/", "/add"]) {
+      assert.equal((await fetch(lonely.base + path)).status, 200, path);
+    }
+    const api = await fetch(lonely.base + "/api/suppliers");
+    assert.equal(api.status, 500);
+    assert.deepEqual(await api.json(), { message: "Database error" });
+  } finally {
+    await lonely.stop();
+  }
+});
