@@ -120,7 +120,16 @@ test("13.1-quiz: pages load and the API answers 500 without a usable database", 
     }
     const api = await fetch(lonely.base + "/api/suppliers");
     assert.equal(api.status, 500);
-    assert.deepEqual(await api.json(), { message: "Database error" });
+    assert.deepEqual(await api.json(), { message: "Server error" });
+
+    // a broken body is the client's fault and must not show a stack trace
+    const bad = await fetch(lonely.base + "/api/suppliers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{bad",
+    });
+    assert.equal(bad.status, 400);
+    assert.deepEqual(await bad.json(), { message: "Bad request" });
   } finally {
     await lonely.stop();
   }

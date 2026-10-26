@@ -241,7 +241,7 @@ test("13-quiz: only real web addresses become links", async () => {
 
 test("13.1-quiz: the pages say so when the API fails", async () => {
   const failing = (window) => {
-    window.fetch = async () => ({ ok: false, status: 500, json: async () => ({ message: "Database error" }) });
+    window.fetch = async () => ({ ok: false, status: 500, json: async () => ({ message: "Server error" }) });
     window.alert = () => {};
   };
 

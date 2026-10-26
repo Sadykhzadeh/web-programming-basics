@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 
 import { pool } from './connectDB';
@@ -10,27 +10,19 @@ app.use(express.json());
 // also serves public/index.html for /
 app.use(express.static(publicDir));
 
-// report a failed query instead of crashing the process
-const handle = (fn: (req: Request, res: Response) => Promise<void>) =>
-  (req: Request, res: Response) =>
-    fn(req, res).catch((error: Error) => {
-      console.error(error.message);
-      res.status(500).send({ message: "Database error" });
-    });
-
-app.get("/api/suppliers", handle(async (req, res) => {
+app.get("/api/suppliers", async (req: Request, res: Response) => {
   const [rows] = await pool.execute("SELECT * FROM suppliers");
 
   res.send(rows);
-}));
+});
 
-app.get("/api/suppliers/:id", handle(async (req, res) => {
+app.get("/api/suppliers/:id", async (req: Request, res: Response) => {
   const [rows] = await pool.query("SELECT * FROM products WHERE supplierID = ?", [req.params.id]);
 
   res.send(rows);
-}));
+});
 
-app.post("/api/suppliers", handle(async (req, res) => {
+app.post("/api/suppliers", async (req: Request, res: Response) => {
   const { productCode, name, price, quantity, supplierID } = req.body;
 
   // Number(null) and Number([]) are 0, so only a number or a non-empty string
@@ -61,10 +53,26 @@ app.post("/api/suppliers", handle(async (req, res) => {
     }
     throw error;
   }
-}));
+});
 
 app.get('/add', (req, res) => {
   res.sendFile(path.join(publicDir, 'add.html'));
+});
+
+// Express 5 passes errors thrown (or rejected) in a handler here, so the routes
+// need no try/catch of their own. Without it the default handler would send the
+// stack trace to the client.
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  if (res.headersSent) {
+    next(error);
+    return;
+  }
+  // body-parser and friends set a status like 400 for a bad request
+  const status = error.status >= 400 && error.status < 500 ? error.status : 500;
+  if (status === 500) console.error(error.message);
+  res.status(status).send({
+    message: status === 500 ? "Server error" : "Bad request",
+  });
 });
 
 const port = process.env.PORT || 3000;
