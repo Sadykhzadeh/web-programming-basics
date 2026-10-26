@@ -101,3 +101,18 @@ test("6-callbacks-promises: posts are shown before the internet request starts",
   assert.match(contentWhenFetched, /World!/);
   window.close();
 });
+
+test("6-callbacks-promises: the first 20 todos are listed one per line", async () => {
+  const titles = Array.from({ length: 25 }, (_, i) => `todo ${i + 1}`);
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async () => ({ ok: true, json: async () => todos(titles) });
+  });
+  const target = window.document.getElementById("fromInternet");
+
+  await until(() => target.innerHTML.includes("todo"));
+  const lines = target.innerHTML.split("<br>").filter(Boolean);
+  assert.equal(lines.length, 20);
+  assert.equal(lines[0], "1 todo 1");
+  assert.ok(!target.textContent.includes(","));
+  window.close();
+});
