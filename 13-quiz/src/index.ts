@@ -11,6 +11,9 @@ import { requestRoute } from "./requestRoute";
 
 const server = http.createServer();
 
+// read once, not for every request
+const indexHtml = getFileData("static/index.html", false);
+
 server.on("request", (req, res) => {
   // /request route for file data sending to client
   if (requestRoute(req, res)) return;
@@ -18,7 +21,7 @@ server.on("request", (req, res) => {
   // index.html for front side
   if (req.url === "/") {
     res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(getFileData("static/index.html", false));
+    res.end(indexHtml);
     return;
   }
 
