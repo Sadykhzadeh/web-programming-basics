@@ -64,13 +64,14 @@ app.post('/auth', (q, res) => {
 
 app.get('/profile', (q, res) => {
   if (q.session.user) {
-    res.send(`Welcome ${escapeHtml(q.session.user.username)}!<br><a href="/logout">Logout</a>`);
+    res.send(`Welcome ${escapeHtml(q.session.user.username)}!<br><form method="post" action="/logout"><button>Logout</button></form>`);
   } else {
     res.redirect('/login');
   }
 });
 
-app.get('/logout', (q, res) => {
+// POST, so that a link or an image on another site cannot log the user out
+app.post('/logout', (q, res) => {
   q.session.destroy(() => {
     res.redirect('/');
   });
