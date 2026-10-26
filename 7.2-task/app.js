@@ -83,15 +83,23 @@ const server = http.createServer(async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
+  // read data from JSON file, before anything is sent so a failure can still
+  // be answered with an error status
+  let users;
+  try {
+    users = JSON.parse(await fs.promises.readFile("users.json"));
+  } catch (error) {
+    console.error(error.message);
+    res.writeHead(500, { "Content-Type": "text/plain" });
+    res.end("Could not read the users");
+    return;
+  }
   res.writeHead(200, { "Content-Type": "text/html" });
   // style table
   res.write(`<h1>Users</h1>${style}${readlTimeInput}`);
   res.write(
     "<table><tr><th>ID</th><th>Name</th><th>Username</th><th>Email</th></tr>",
   );
-  // read data from JSON file
-  const data = fs.readFileSync("users.json");
-  const users = JSON.parse(data);
   // print data to the HTTP response
   users.forEach((user) => {
     res.write(

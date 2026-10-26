@@ -75,3 +75,13 @@ test("7.2-task: a failing API falls back to the saved users", async () => {
   const html = await res.text();
   assert.equal(html.match(/<tr><td>/g).length, users.length);
 });
+
+test("7.2-task: a broken users.json answers 500 and the server keeps running", async () => {
+  apiStatus = 500;
+  writeFileSync(usersFile, "{ not json");
+  const broken = await fetch(server.base);
+  assert.equal(broken.status, 500);
+
+  writeFileSync(usersFile, original);
+  assert.equal((await fetch(server.base)).status, 200);
+});
