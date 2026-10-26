@@ -49,3 +49,22 @@ for (const lesson of lessons) {
     }
   });
 }
+
+// every page a learner can open: a real title and a language
+const pages = [
+  ...lessons.flatMap((lesson) => htmlFiles(lesson).map((page) => `${lesson}/${page}`)),
+  "7-nodejs-start/some.html",
+  "13-quiz/static/index.html",
+  "13.1-quiz/public/index.html",
+  "13.1-quiz/public/add.html",
+  "12-simple-session-auth/static/login.html",
+];
+
+for (const page of pages) {
+  test(`${page}: has a title and a language`, () => {
+    const { document } = new JSDOM(readFileSync(join(root, page), "utf8")).window;
+    const title = document.title.trim();
+    assert.ok(title && title !== "Document", `title is "${title}"`);
+    assert.ok(document.documentElement.getAttribute("lang"), "no lang on <html>");
+  });
+}
