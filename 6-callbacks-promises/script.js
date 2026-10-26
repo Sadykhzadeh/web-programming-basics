@@ -32,15 +32,19 @@ let posts = [
 
 pasteContent("content", "Wait.");
 
-const getPosts = async () => {
+// returns a promise so that `await getPosts()` really waits for the posts
+const getPosts = () => {
   pasteContent("content", "Loading....");
-  setTimeout(() => {
-    let allMyPosts = "";
-    posts.forEach((p) => {
-      allMyPosts += beautifyPost(p);
-    });
-    pasteContent("content", allMyPosts);
-  }, 500);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      let allMyPosts = "";
+      posts.forEach((p) => {
+        allMyPosts += beautifyPost(p);
+      });
+      pasteContent("content", allMyPosts);
+      resolve();
+    }, 500);
+  });
 };
 
 // Callback
