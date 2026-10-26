@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import dotenv from "dotenv";
 import path from "path";
@@ -7,6 +7,19 @@ import { randomBytes } from "crypto";
 dotenv.config({ quiet: true });
 
 const app: express.Application = express();
+// Basic response headers. No scripts or frames from elsewhere, the browser
+// must not guess content types, and the framework name is nobody's business.
+app.disable("x-powered-by");
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.set({
+    "Content-Security-Policy":
+      "default-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+  });
+  next();
+});
+
 
 // The name comes out of a form and goes into a page. Without this, signing in
 // as <img src=x onerror=...> is enough to make the profile page run it.
