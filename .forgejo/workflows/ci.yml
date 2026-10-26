@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: docker
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      # the root holds the tests, every Node lesson has its own dependencies
+      - name: Install
+        run: |
+          for dir in . 7-nodejs-start 7.2-task 7.3-task-with-db 8-express \
+            12-simple-session-auth 13-quiz 13.1-quiz; do
+            (cd "$dir" && npm ci --no-audit --no-fund)
+          done
+
+      # the tests that need MySQL skip themselves when nothing listens on 3306
+      - name: Test
+        run: npm test
+
+  audit:
+    runs-on: docker
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Audit
+        run: |
+          failed=0
+          for dir in . 7-nodejs-start 7.2-task 7.3-task-with-db 8-express \
+            12-simple-session-auth 13-quiz 13.1-quiz; do
+            echo "== $dir"
+            (cd "$dir" && npm audit) || failed=1
+          done
+          exit $failed
