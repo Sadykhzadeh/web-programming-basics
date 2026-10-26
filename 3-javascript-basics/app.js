@@ -1,10 +1,10 @@
 // Arrow function
-let func1 = (arg1, arg2, ...argn) => {
+const func1 = (arg1, arg2, ...argn) => {
   expression;
 };
 
 // functional epression
-let func = function (arg1, arg2, ...argn) {
+const func = function (arg1, arg2, ...argn) {
   return expression;
 };
 
@@ -18,7 +18,7 @@ console.log(summo(1, 2));
 
 // Higher order functions
 
-var pilots = [
+const pilots = [
   {
     id: 10,
     name: "Poe Domeron",
