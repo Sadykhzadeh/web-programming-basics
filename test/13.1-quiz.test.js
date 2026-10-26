@@ -130,6 +130,11 @@ test("13.1-quiz: pages load and the API answers 500 without a usable database", 
     });
     assert.equal(bad.status, 400);
     assert.deepEqual(await bad.json(), { message: "Bad request" });
+
+    // no body at all (Express 5 leaves req.body undefined) is an incomplete form
+    const empty = await fetch(lonely.base + "/api/suppliers", { method: "POST" });
+    assert.equal(empty.status, 400);
+    assert.match((await empty.json()).message, /filled out/);
   } finally {
     await lonely.stop();
   }
