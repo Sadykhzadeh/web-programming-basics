@@ -34,12 +34,13 @@ const freePort = () =>
     });
   });
 
-// Starts `node <args>` inside a lesson folder on a free port (passed as PORT)
-// and resolves once it answers HTTP requests.
-export const startServer = async (lesson, args, env = {}) => {
+// Starts `node <args>` on a free port (passed as PORT) and resolves once it
+// answers HTTP requests. It runs inside the lesson folder unless `cwd` says
+// otherwise, and `args` are relative to that folder.
+export const startServer = async (lesson, args, { env = {}, cwd = lesson } = {}) => {
   const port = await freePort();
   const child = spawn(process.execPath, args, {
-    cwd: join(root, lesson),
+    cwd: join(root, cwd),
     env: { ...process.env, PORT: String(port), ...env },
     stdio: ["ignore", "pipe", "pipe"],
   });

@@ -1,9 +1,13 @@
 import express from "express";
 import path from "path";
+import { fileURLToPath } from "url";
 import hbs from "hbs";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// folders next to this file, so the app also starts from another directory
+const here = path.dirname(fileURLToPath(import.meta.url));
 
 // app.get('', (req, res) => {
 //   res.status(200).send(`
@@ -11,14 +15,14 @@ const port = 3000;
 //   `);
 // });
 
-app.use(express.static("public"));
+app.use(express.static(path.join(here, "public")));
 
 // view engine
 app.set("view engine", "hbs");
-app.set("views", path.join(path.resolve(), "views"));
+app.set("views", path.join(here, "views"));
 
 // partials
-hbs.registerPartials(path.join(path.resolve(), "views"));
+hbs.registerPartials(path.join(here, "views"));
 
 app.get("", (req, res) => {
   res.render("index", {
