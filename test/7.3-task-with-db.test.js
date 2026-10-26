@@ -55,3 +55,24 @@ test("7.3-task-with-db: animal names are escaped", { skip }, async () => {
     await db.end();
   }
 });
+
+test("7.3-task-with-db: a failed query answers 500 and does not leave connections open", { skip }, async () => {
+  const db = await admin();
+  const open = async () => {
+    const [[row]] = await db.query("show status like 'Threads_connected'");
+    return Number(row.Value);
+  };
+  await db.query("rename table animals.animals to animals.animals_gone");
+  try {
+    const before = await open();
+    for (let i = 0; i < 5; i++) {
+      const res = await fetch(server.base);
+      assert.equal(res.status, 500);
+      assert.equal(await res.text(), "Database error");
+    }
+    assert.ok((await open()) <= before + 1, "connections were left open");
+  } finally {
+    await db.query("rename table animals.animals_gone to animals.animals");
+    await db.end();
+  }
+});

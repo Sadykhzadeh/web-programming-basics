@@ -1,7 +1,16 @@
 import express from "express";
-import { createConnection } from "mysql2/promise";
+import { createPool } from "mysql2/promise";
 
 const app = express();
+
+// one pool for the whole app: a connection is opened once and reused, instead
+// of a new login for every request
+const pool = createPool({
+  host: "localhost",
+  user: "root",
+  password: process.env.DB_PASSWORD || "password",
+  database: "animals",
+});
 
 // values from the database go into HTML, so they have to be escaped
 const escapeHtml = (value) =>
@@ -14,15 +23,7 @@ const escapeHtml = (value) =>
 
 app.get("/", async (__req, res) => {
   try {
-    const connection = await createConnection({
-      host: "localhost",
-      user: "root",
-      password: process.env.DB_PASSWORD || "password",
-      database: "animals",
-    });
-
-    const [rows] = await connection.execute("SELECT * FROM `animals`");
-    await connection.end();
+    const [rows] = await pool.execute("SELECT * FROM `animals`");
     const animals = rows.map((row) => row.name);
 
     res.send(`
