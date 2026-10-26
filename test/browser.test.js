@@ -341,3 +341,11 @@ test("4.3-task-list: every delete button names its task", async () => {
   assert.equal(new Set(labels).size, labels.length - 1); // "Work" is in the list twice
   window.close();
 });
+
+test("6.2-classwork-continents: the select has a label and the list is announced", async () => {
+  const { window } = await loadPage("6.2-classwork-continents");
+  const { document } = window;
+  assert.equal(document.querySelector('label[for="continents"]').textContent, "Continent");
+  assert.equal(document.getElementById("content").getAttribute("aria-live"), "polite");
+  window.close();
+});
