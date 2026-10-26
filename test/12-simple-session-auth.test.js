@@ -103,3 +103,15 @@ test("12-simple-session-auth: logging out is a POST and ends the session", async
   assert.equal(out.headers.get("location"), "/");
   assert.equal((await request("/profile", { cookie })).headers.get("location"), "/login");
 });
+
+test("12-simple-session-auth: a broken JSON body gets no stack trace", async () => {
+  const res = await fetch(server.base + "/auth", {
+    method: "POST",
+    redirect: "manual",
+    headers: { "Content-Type": "application/json" },
+    body: "{bad",
+  });
+  // the login is a form post, there is no JSON parser to fail
+  assert.equal(res.status, 302);
+  assert.equal(res.headers.get("location"), "/login");
+});

@@ -37,7 +37,6 @@ app.use(session({
     secure: false, // set to true when served over HTTPS
   },
 }));
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../static')));
 
@@ -50,7 +49,7 @@ app.get('/login', (q, res) => {
 });
 
 app.post('/auth', (q, res) => {
-  const { username, password } = q.body;
+  const { username, password } = q.body ?? {};
   if (typeof username === 'string' && username.length > 0 && username.length <= 50 && password === 'azer') {
     // new session id after login, so an id set before it is useless
     q.session.regenerate(() => {
