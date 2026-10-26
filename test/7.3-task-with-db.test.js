@@ -37,6 +37,8 @@ test("7.3-task-with-db: lists the animals from the database", { skip }, async ()
   assert.equal(res.status, 200);
   const html = await res.text();
   assert.match(html, /<td>Bella<\/td>/);
+  assert.match(html, /^<!DOCTYPE html>\s*<html lang="en">/);
+  assert.match(html, /<title>Animals<\/title>/);
   assert.equal(html.match(/<td>/g).length, 20);
 });
 
