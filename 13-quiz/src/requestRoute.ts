@@ -1,14 +1,15 @@
 import { getFileData } from "./dataFromJSON";
 
+// to pull data from external JSON file, once: the file never changes while the
+// server runs, so there is no need to read and parse it again for every request
+const data: JSON = getFileData("static/500_records.json", true) as JSON;
+
+// convert JSON object to array
+const dataArr = Object.values(data);
+
 // answers /request?limit=N and returns true, or returns false for any other url
 export const requestRoute = (req, res): boolean => {
   if (req.url.startsWith("/request?")) {
-    // to pull data from external JSON file.
-    const data: JSON = getFileData("static/500_records.json", true) as JSON;
-
-    // convert JSON object to array
-    const dataArr = Object.values(data);
-
     // get the value of the "limit" parameter
     const limit = new URL(req.url, "http://localhost").searchParams.get("limit");
 
