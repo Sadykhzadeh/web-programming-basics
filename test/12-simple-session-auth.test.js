@@ -62,7 +62,10 @@ test("12-simple-session-auth: signing in opens a session with a safe cookie", as
 
   const profile = await request("/profile", { cookie });
   assert.equal(profile.status, 200);
-  assert.match(await profile.text(), /Welcome azer!/);
+  const page = await profile.text();
+  assert.match(page, /<h1>Welcome azer!<\/h1>/);
+  assert.match(page, /^<!DOCTYPE html>\s*<html lang="en">/);
+  assert.match(page, /<title>Profile<\/title>/);
 
   const home = await request("/", { cookie });
   assert.equal(home.headers.get("location"), "/profile");

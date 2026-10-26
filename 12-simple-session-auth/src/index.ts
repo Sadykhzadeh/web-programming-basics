@@ -64,7 +64,18 @@ app.post('/auth', (q, res) => {
 
 app.get('/profile', (q, res) => {
   if (q.session.user) {
-    res.send(`Welcome ${escapeHtml(q.session.user.username)}!<br><form method="post" action="/logout"><button>Logout</button></form>`);
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <title>Profile</title>
+</head>
+<body>
+  <h1>Welcome ${escapeHtml(q.session.user.username)}!</h1>
+  <form method="post" action="/logout"><button>Logout</button></form>
+</body>
+</html>`);
   } else {
     res.redirect('/login');
   }
