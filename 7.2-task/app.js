@@ -46,11 +46,12 @@ const style = `<style>
       </style>`;
 
 const readlTimeInput =
-  `<input type="text" id="search" onkeyup="search()" placeholder="Search realtime for names...">`;
+  `<label for="search">Search for names</label> <input type="text" id="search" oninput="search()" placeholder="Search realtime for names...">`;
 const realTimeScript = `<script>
         function search() {
           let input = document.getElementById('search').value;
-          let x = document.getElementsByTagName('tr');
+          // only the users, the header row stays
+          let x = document.querySelectorAll('tbody tr');
           for (let i = 0; i < x.length; i++) {
             if (!x[i].innerHTML.toLowerCase().includes(input.toLowerCase())) {
               x[i].style.display = 'none';
@@ -96,9 +97,11 @@ const server = http.createServer(async (req, res) => {
   }
   res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
   // style table
-  res.write(`<h1>Users</h1>${style}${readlTimeInput}`);
   res.write(
-    "<table><tr><th>ID</th><th>Name</th><th>Username</th><th>Email</th></tr>",
+    `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Users</title>${style}</head><body><h1>Users</h1>${readlTimeInput}`,
+  );
+  res.write(
+    '<table><thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Username</th><th scope="col">Email</th></tr></thead><tbody>',
   );
   // print data to the HTTP response
   users.forEach((user) => {
@@ -106,7 +109,7 @@ const server = http.createServer(async (req, res) => {
       `<tr><td>${escapeHtml(user.id)}</td><td>${escapeHtml(user.name)}</td><td>${escapeHtml(user.username)}</td><td>${escapeHtml(user.email)}</td></tr>`,
     );
   });
-  res.write(`</table>${realTimeScript}`);
+  res.write(`</tbody></table>${realTimeScript}</body></html>`);
   res.end();
 });
 
