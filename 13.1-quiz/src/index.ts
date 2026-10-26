@@ -49,8 +49,17 @@ app.post("/api/suppliers", handle(async (req, res) => {
     return;
   }
 
-  const [rows] = await pool.query("INSERT INTO products (productCode, name, price, quantity, supplierID) VALUES (?, ?, ?, ?, ?)", [productCode, name, price, quantity, supplierID]);
-  res.send(rows);
+  try {
+    const [rows] = await pool.query("INSERT INTO products (productCode, name, price, quantity, supplierID) VALUES (?, ?, ?, ?, ?)", [productCode, name, price, quantity, supplierID]);
+    res.send(rows);
+  } catch (error) {
+    // the foreign key to suppliers failed: the client sent a bad supplier
+    if ((error as { code?: string }).code === "ER_NO_REFERENCED_ROW_2") {
+      res.status(400).send({ message: "Unknown supplier" });
+      return;
+    }
+    throw error;
+  }
 }));
 
 app.get('/add', (req, res) => {
