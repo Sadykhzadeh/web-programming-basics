@@ -9,20 +9,20 @@
 </head>
 
 <body>
-  <div id="form">
+  <form id="form">
     <label for="productCode">Product Code</label>
-    <input type="text" name="productCode" id="productCode">
+    <input type="text" name="productCode" id="productCode" minlength="3" maxlength="3" required>
     <label for="name">Name</label>
     <input type="text" name="productName" id="name" required>
     <label for="price">Price</label>
-    <input type="number" name="price" id="price" required>
+    <input type="number" name="price" id="price" min="0" step="0.01" required>
     <label for="quantity">Quantity</label>
-    <input type="number" name="quantityInStock" id="quantity" required>
+    <input type="number" name="quantityInStock" id="quantity" min="0" step="1" required>
     <label for="supplier">Supplier</label>
     <select name="supplierID" id="supplier">
     </select>
     <input type="submit" value="Submit" id="submit">
-  </div>
+  </form>
   <script src="add.js"></script>
 </body>
 

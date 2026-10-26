@@ -59,4 +59,6 @@ const submitForm = async (event) => {
 }
 
   
-document.getElementById("submit").addEventListener("click", submitForm);
+// a form submit covers the button and the Enter key, and lets the browser check
+// the required fields first
+document.getElementById("form").addEventListener("submit", submitForm);
