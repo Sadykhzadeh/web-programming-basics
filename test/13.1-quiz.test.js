@@ -86,6 +86,9 @@ test("13.1-quiz: adds a product and rejects incomplete ones", { skip }, async ()
       { ...product, price: "" },
       { ...product, quantity: "1.5" },
       { ...product, productCode: "TOOLONG" },
+      { ...product, price: null },
+      { ...product, quantity: [] },
+      { ...product, supplierID: null },
     ]) {
       const { res, body } = await post(bad);
       assert.equal(res.status, 400, JSON.stringify(bad));
