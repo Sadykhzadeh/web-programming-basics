@@ -12,7 +12,7 @@
             background: green;
         }
 
-        qwe {
+        .qwe {
             /* flex */
             display: inline-block;
             margin: 12px;
@@ -28,12 +28,13 @@
     <br>
     <hr><br>
 
-    <input type="text" name="" id="input">
+    <label for="input">Text: </label>
+    <input type="text" id="input">
     <button id="get">GET</button>
     <br>
     <hr><br>
 
-    <qwe>
+    <div class="qwe">
         <!-- name age and password -->
         <label for="name">Name: </label>
         <input type="text" name="name" id="name">
@@ -42,7 +43,7 @@
         <input type="text" name="age" id="age">
         <br>
         <label for="password">Password: </label>
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" autocomplete="current-password">
         <!-- select, radio, etc. -->
         <br>
         <label for="select">Select: </label>
@@ -55,7 +56,7 @@
         <label for="checkbox">Hello???</label>
         <input type="checkbox" name="Hello?" id="checkbox">
         <button id="submit">Submit</button>
-    </qwe>
+    </div>
     <script src="./dom.js"></script>
 </body>
 
