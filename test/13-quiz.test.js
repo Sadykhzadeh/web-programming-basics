@@ -33,3 +33,10 @@ test("13-quiz: limit picks how many records come back", async () => {
 
   assert.equal((await records("limit=0")).body.length, 0);
 });
+
+test("13-quiz: unknown paths answer 404, not an empty page", async () => {
+  for (const path of ["/favicon.ico", "/nope", "/request"]) {
+    const res = await fetch(server.base + path);
+    assert.equal(res.status, 404, path);
+  }
+});

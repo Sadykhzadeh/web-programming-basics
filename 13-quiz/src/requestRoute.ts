@@ -1,6 +1,7 @@
 import { getFileData } from "./dataFromJSON";
 
-export const requestRoute = (req, res) => {
+// answers /request?limit=N and returns true, or returns false for any other url
+export const requestRoute = (req, res): boolean => {
   if (req.url.startsWith("/request?")) {
     // send 200 OK status
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -33,10 +34,7 @@ export const requestRoute = (req, res) => {
 
     // send JSON object to client
     res.end(filteredJSON);
+    return true;
   }
-  // else {
-  //   res.writeHead(404, { "Content-Type": "text/html" });
-  //   res.write("404");
-  // }
-  // res.end();
+  return false;
 };
