@@ -1,3 +1,4 @@
+import { IncomingMessage, ServerResponse } from "http";
 import { getFileData } from "./dataFromJSON";
 
 // to pull data from external JSON file, once: the file never changes while the
@@ -8,8 +9,11 @@ const data: JSON = getFileData("static/500_records.json", true) as JSON;
 const dataArr = Object.values(data);
 
 // answers /request?limit=N and returns true, or returns false for any other url
-export const requestRoute = (req, res): boolean => {
-  if (req.url.startsWith("/request?")) {
+export const requestRoute = (
+  req: IncomingMessage,
+  res: ServerResponse,
+): boolean => {
+  if (req.url?.startsWith("/request?")) {
     // get the value of the "limit" parameter
     const limit = new URL(req.url, "http://localhost").searchParams.get("limit");
 
