@@ -100,16 +100,21 @@ const createPosts = ({ title, body }) =>
   });
 
 const fetchDataFromInternet = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/todos");
-  if (res.ok) {
-    const q = await res.json();
-    pasteContent(
-      "fromInternet",
-      q.filter((x, i) => i < 20).map((x) => `${x.id} ${escapeHtml(x.title)}<br>`)
-        .join(""),
-    );
-    // console.log(q);
-  } else {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+    if (res.ok) {
+      const q = await res.json();
+      pasteContent(
+        "fromInternet",
+        q.filter((x, i) => i < 20).map((x) =>
+          `${x.id} ${escapeHtml(x.title)}<br>`
+        ).join(""),
+      );
+      // console.log(q);
+    } else {
+      pasteContent("fromInternet", "Could not load data.");
+    }
+  } catch {
     pasteContent("fromInternet", "Could not load data.");
   }
 };
@@ -160,6 +165,7 @@ document.getElementById("chuckNorris").addEventListener("click", () => {
     const joke = JSON.parse(this.responseText);
     pasteContent("chuckNorris", escapeHtml(joke.value));
   };
+  xhr.onerror = () => pasteContent("chuckNorris", "Could not load data.");
   xhr.send();
 });
 
@@ -168,7 +174,8 @@ document.getElementById("chuckNorris").addEventListener("click", () => {
 document.getElementById("btn1").addEventListener("click", () => {
   fetch("randomdata.txt")
     .then((res) => res.text())
-    .then((data) => pasteContent("contentFetch", data));
+    .then((data) => pasteContent("contentFetch", data))
+    .catch(() => pasteContent("contentFetch", "Could not load data."));
 });
 
 document.getElementById("btn2").addEventListener("click", () => {
@@ -180,11 +187,13 @@ document.getElementById("btn2").addEventListener("click", () => {
         output += customerBeutify(customer);
       });
       pasteContent("contentFetch", output);
-    });
+    })
+    .catch(() => pasteContent("contentFetch", "Could not load data."));
 });
 
 document.getElementById("btn3").addEventListener("click", () => {
   fetch("https://api.chucknorris.io/jokes/random")
     .then((res) => res.json())
-    .then((data) => pasteContent("contentFetch", escapeHtml(data.value)));
+    .then((data) => pasteContent("contentFetch", escapeHtml(data.value)))
+    .catch(() => pasteContent("contentFetch", "Could not load data."));
 });

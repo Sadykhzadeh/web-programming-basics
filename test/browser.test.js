@@ -138,3 +138,20 @@ test("6-callbacks-promises: text from the internet is not parsed as HTML", async
   assert.equal(document.querySelector("#contentFetch img"), null);
   window.close();
 });
+
+test("6-callbacks-promises: a failed request shows a message", async () => {
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async () => {
+      throw new TypeError("offline");
+    };
+  });
+  const { document } = window;
+
+  await until(() => document.getElementById("fromInternet").textContent !== "");
+  assert.equal(document.getElementById("fromInternet").textContent, "Could not load data.");
+
+  document.getElementById("btn3").click();
+  await until(() => document.getElementById("contentFetch").textContent !== "");
+  assert.equal(document.getElementById("contentFetch").textContent, "Could not load data.");
+  window.close();
+});
