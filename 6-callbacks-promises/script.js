@@ -1,4 +1,4 @@
-let posts = [
+const posts = [
     {
       "title": "Post 1",
       "body":
