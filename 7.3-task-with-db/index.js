@@ -2,6 +2,19 @@ import express from "express";
 import { createPool } from "mysql2/promise";
 
 const app = express();
+// Basic response headers. No scripts or frames from elsewhere, the browser
+// must not guess content types, and the framework name is nobody's business.
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.set({
+    "Content-Security-Policy":
+      "default-src 'none'; frame-ancestors 'none'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+  });
+  next();
+});
+
 
 // one pool for the whole app: a connection is opened once and reused, instead
 // of a new login for every request
