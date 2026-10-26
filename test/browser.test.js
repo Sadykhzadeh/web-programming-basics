@@ -310,3 +310,16 @@ test("3.2-classwork-flights: the form states what is required and the result is 
   assert.equal(document.getElementById("passengers").min, "1");
   window.close();
 });
+
+test("4 and 4.2: the regions that change are announced", async () => {
+  for (const [lesson, ids] of [
+    ["4-table-objects-target", ["text", "anotherText"]],
+    ["4.2-card-order", ["result"]],
+  ]) {
+    const { window } = await loadPage(lesson);
+    for (const id of ids) {
+      assert.equal(window.document.getElementById(id).getAttribute("aria-live"), "polite", `${lesson} #${id}`);
+    }
+    window.close();
+  }
+});
