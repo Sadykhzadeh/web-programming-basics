@@ -238,3 +238,20 @@ test("13-quiz: only real web addresses become links", async () => {
   assert.equal(document.querySelector(".objectBox iframe"), null);
   window.close();
 });
+
+test("13.1-quiz: the pages say so when the API fails", async () => {
+  const failing = (window) => {
+    window.fetch = async () => ({ ok: false, status: 500, json: async () => ({ message: "Database error" }) });
+    window.alert = () => {};
+  };
+
+  const list = await loadPage("13.1-quiz", failing, "public/index.html");
+  await until(() => list.window.document.getElementById("suppliers").textContent !== "");
+  assert.equal(list.window.document.getElementById("suppliers").textContent, "Could not load the suppliers.");
+  list.window.close();
+
+  const add = await loadPage("13.1-quiz", failing, "public/add.html");
+  await until(() => add.window.document.getElementById("supplier").textContent !== "");
+  assert.equal(add.window.document.getElementById("supplier").textContent, "Could not load the suppliers.");
+  add.window.close();
+});
