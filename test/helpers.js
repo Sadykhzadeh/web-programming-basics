@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { createServer } from "node:net";
+import { connect, createServer } from "node:net";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { JSDOM } from "jsdom";
@@ -76,3 +76,14 @@ export const startServer = async (lesson, args, { env = {}, cwd = lesson } = {})
     },
   };
 };
+
+// The lessons that talk to MySQL are skipped where no server answers on the
+// default port.
+export const mysqlUp = () =>
+  new Promise((resolve) => {
+    const socket = connect({ host: "127.0.0.1", port: 3306 });
+    socket.setTimeout(1000, () => socket.destroy());
+    socket.once("connect", () => socket.end() && resolve(true));
+    socket.once("error", () => resolve(false));
+    socket.once("close", () => resolve(false));
+  });
