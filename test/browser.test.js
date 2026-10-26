@@ -349,3 +349,11 @@ test("6.2-classwork-continents: the select has a label and the list is announced
   assert.equal(document.getElementById("content").getAttribute("aria-live"), "polite");
   window.close();
 });
+
+test("6-callbacks-promises: the joke box is a button, so the keyboard can reach it", async () => {
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async () => ({ ok: true, json: async () => [] });
+  });
+  assert.equal(window.document.getElementById("chuckNorris").tagName, "BUTTON");
+  window.close();
+});
