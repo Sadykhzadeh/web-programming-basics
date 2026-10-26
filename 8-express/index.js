@@ -4,6 +4,19 @@ import { fileURLToPath } from "url";
 import hbs from "hbs";
 
 const app = express();
+// Basic response headers. No scripts or frames from elsewhere, the browser
+// must not guess content types, and the framework name is nobody's business.
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.set({
+    "Content-Security-Policy":
+      "default-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+  });
+  next();
+});
+
 const port = process.env.PORT || 3000;
 
 // folders next to this file, so the app also starts from another directory

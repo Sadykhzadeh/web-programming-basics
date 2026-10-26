@@ -42,3 +42,13 @@ test("8-express: unknown pages answer 404 whatever the method", async () => {
     assert.match(await res.text(), /Page not found/);
   }
 });
+
+test("8-express: responses carry the basic security headers", async () => {
+  for (const path of ["/", "/style.css", "/nope"]) {
+    const res = await get(path);
+    assert.equal(res.headers.get("x-content-type-options"), "nosniff", path);
+    assert.match(res.headers.get("content-security-policy"), /default-src 'self'/, path);
+    assert.match(res.headers.get("content-security-policy"), /frame-ancestors 'none'/, path);
+    assert.equal(res.headers.get("x-powered-by"), null, path);
+  }
+});
