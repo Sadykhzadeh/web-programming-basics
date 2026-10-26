@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import path from "path";
 
 import { pool } from './connectDB';
@@ -11,11 +11,12 @@ app.use(express.json());
 app.use(express.static(publicDir));
 
 // report a failed query instead of crashing the process
-const handle = (fn) => (req, res) =>
-  fn(req, res).catch((error) => {
-    console.error(error.message);
-    res.status(500).send({ message: "Database error" });
-  });
+const handle = (fn: (req: Request, res: Response) => Promise<void>) =>
+  (req: Request, res: Response) =>
+    fn(req, res).catch((error: Error) => {
+      console.error(error.message);
+      res.status(500).send({ message: "Database error" });
+    });
 
 app.get("/api/suppliers", handle(async (req, res) => {
   const [rows] = await pool.execute("SELECT * FROM suppliers");
@@ -34,7 +35,7 @@ app.post("/api/suppliers", handle(async (req, res) => {
 
   // Number(null) and Number([]) are 0, so only a number or a non-empty string
   // counts as a value
-  const given = (value) =>
+  const given = (value: unknown) =>
     (typeof value === "string" || typeof value === "number") && value !== "";
 
   // all fields are required (see task.txt), match the column types of db.sql
