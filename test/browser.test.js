@@ -387,3 +387,39 @@ test("13-quiz: a rejected request shows a message instead of an empty page", asy
   assert.equal(result.textContent, "Could not load the records.");
   window.close();
 });
+
+test("13.1-quiz: the add form is submitted as a form and checked by the browser first", async () => {
+  const posts = [];
+  const { window } = await loadPage("13.1-quiz", (window) => {
+    window.alert = () => {};
+    window.fetch = async (url, init) => {
+      if (init?.method === "POST") {
+        posts.push(JSON.parse(init.body));
+        return { ok: true, status: 201, json: async () => ({}) };
+      }
+      return { ok: true, json: async () => [{ supplierID: 7, name: "ABC" }] };
+    };
+  }, "public/add.html");
+  const { document } = window;
+  const form = document.getElementById("form");
+  await until(() => document.querySelector("#supplier option"));
+
+  // empty required fields: the browser stops the submit
+  form.requestSubmit();
+  assert.equal(posts.length, 0);
+
+  document.getElementById("productCode").value = "ABC";
+  document.getElementById("name").value = "Pen";
+  document.getElementById("price").value = "1.5";
+  document.getElementById("quantity").value = "4";
+  form.requestSubmit();
+  await until(() => posts.length === 1);
+  assert.deepEqual(posts[0], {
+    productCode: "ABC",
+    name: "Pen",
+    price: "1.5",
+    quantity: "4",
+    supplierID: "7",
+  });
+  window.close();
+});
