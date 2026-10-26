@@ -300,3 +300,13 @@ test("3-javascript-basics: the buttons change the page", async () => {
   assert.equal(shown, "hello");
   window.close();
 });
+
+test("3.2-classwork-flights: the form states what is required and the result is announced", async () => {
+  const { window } = await loadPage("3.2-classwork-flights");
+  const { document } = window;
+  // a ticked round way is a choice, not something every visitor has to do
+  assert.ok(!document.getElementById("isRoundWay").required);
+  assert.equal(document.getElementById("result").getAttribute("aria-live"), "polite");
+  assert.equal(document.getElementById("passengers").min, "1");
+  window.close();
+});
