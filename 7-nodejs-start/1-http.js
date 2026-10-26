@@ -7,9 +7,11 @@
 import http from "http";
 import { readFileSync } from "fs";
 
+const port = process.env.PORT || 5000;
+
 http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/html" });
   res.write(readFileSync("./some.html", "utf8"));
   res.end();
-}).listen(5000);
-console.log("http://localhost:5000");
+}).listen(port);
+console.log(`http://localhost:${port}`);
