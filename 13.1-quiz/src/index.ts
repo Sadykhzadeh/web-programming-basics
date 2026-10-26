@@ -1,11 +1,14 @@
 import express from "express";
-import fs from "fs";
+import path from "path";
 
 import { pool } from './connectDB';
 
 const app = express();
+// the public folder is next to src and dist, wherever the server is started from
+const publicDir = path.join(__dirname, "..", "public");
 app.use(express.json());
-app.use(express.static("public"));
+// also serves public/index.html for /
+app.use(express.static(publicDir));
 
 // report a failed query instead of crashing the process
 const handle = (fn) => (req, res) =>
@@ -45,14 +48,11 @@ app.post("/api/suppliers", handle(async (req, res) => {
   res.send(rows);
 }));
 
-app.get('/', (req, res) => {
-  res.send(fs.readFileSync('./public/index.html', 'utf8'));
-});
-
 app.get('/add', (req, res) => {
-  res.send(fs.readFileSync('./public/add.html', 'utf8'));
+  res.sendFile(path.join(publicDir, 'add.html'));
 });
 
-app.listen(3000, () => {
-  console.log(`Server is running! http://localhost:3000`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running! http://localhost:${port}`);
 })
