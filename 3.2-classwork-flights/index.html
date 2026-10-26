@@ -18,15 +18,15 @@
   </select>
   <br>
   <label for="isRoundWay">Is Round Way: </label>
-  <input type="checkbox" name="isRoundWay" id="isRoundWay" required value="1">
+  <input type="checkbox" name="isRoundWay" id="isRoundWay" value="1">
   <br>
   <label for="passengers">Passengers: </label>
-  <input required type="number" name="passengers" id="passengers">
+  <input required type="number" min="1" name="passengers" id="passengers">
   <br>
   <label for="child">Child age: </label>
-  <input required type="number" name="child" id="child">
+  <input required type="number" min="0" name="child" id="child">
   <br>
-  <div id="result"></div>
+  <div id="result" aria-live="polite"></div>
   <script src="./script.js"></script>
 </body>
 
