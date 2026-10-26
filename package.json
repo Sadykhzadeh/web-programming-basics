@@ -1,0 +1,13 @@
+{
+  "name": "web-programming-basics",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Smoke tests for the lesson folders",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 \"test/*.test.js\""
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3"
+  }
+}
