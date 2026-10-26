@@ -367,3 +367,13 @@ test("6-callbacks-promises: every box that is filled in later is announced", asy
   }
   window.close();
 });
+
+test("13-quiz: the number field has a label and the records are announced", async () => {
+  const { window } = await loadPage("13-quiz", (window) => {
+    window.fetch = async () => ({ ok: true, json: async () => [] });
+  }, "static/index.html");
+  const { document } = window;
+  assert.equal(document.querySelector('label[for="number"]').textContent, "Number of records");
+  assert.equal(document.getElementById("result").getAttribute("aria-live"), "polite");
+  window.close();
+});
