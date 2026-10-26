@@ -26,10 +26,17 @@ app.get("/", async (__req, res) => {
     const [rows] = await pool.execute("SELECT * FROM `animals`");
     const animals = rows.map((row) => row.name);
 
-    res.send(`
+    res.send(`<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Animals</title>
+      </head>
+      <body>
+      <h1>Animals</h1>
       <table>
         <tr>
-          <th>Animal</th>
+          <th scope="col">Animal</th>
         </tr>
         ${
       animals.map((animal) => `
@@ -39,6 +46,8 @@ app.get("/", async (__req, res) => {
         `).join("")
     }
       </table>
+      </body>
+      </html>
     `);
   } catch (error) {
     console.error(error.message);
