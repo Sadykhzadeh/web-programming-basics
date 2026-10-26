@@ -1,10 +1,12 @@
-const submitButton = document.getElementById("submit"),
+const form = document.getElementById("container"),
   unameInfo = document.getElementById("usernameInfo"),
   passInfo = document.getElementById("passwordInfo"),
   confInfo = document.getElementById("confirmationInfo"),
   pass = document.getElementById("pass");
 
-submitButton.onclick = () => {
+form.addEventListener("submit", (e) => {
+  // nothing is sent anywhere, the checks below are the whole lesson
+  e.preventDefault();
   unameInfo.innerHTML = "";
   passInfo.innerHTML = "";
   confInfo.innerHTML = "";
@@ -15,7 +17,7 @@ submitButton.onclick = () => {
   validatePassword.validateUpperCase();
   validatePassword.validateNumbers();
   confirmPassword();
-};
+});
 
 const validateUsername = () => {
   const uname = document.getElementById("uname").value;

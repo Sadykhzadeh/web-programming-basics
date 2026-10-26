@@ -10,21 +10,24 @@
 
 <body>
     <h1>Form</h1>
-    <div id="container">
-        <input type="text" id="uname" placeholder="username">
-        <p id="usernameInfo"></p>
+    <form id="container" novalidate>
+        <label for="uname">Username</label>
+        <input type="text" id="uname" autocomplete="username" aria-describedby="usernameInfo">
+        <p id="usernameInfo" aria-live="polite"></p>
         <br>
         <br>
-        <input type="password" id="pass" placeholder="password">
-        <p id="passwordInfo"></p>
+        <label for="pass">Password</label>
+        <input type="password" id="pass" autocomplete="new-password" aria-describedby="passwordInfo">
+        <p id="passwordInfo" aria-live="polite"></p>
         <br>
         <br>
-        <input type="password" id="confirmation" placeholder="confirm password">
-        <p id="confirmationInfo"></p>
+        <label for="confirmation">Confirm password</label>
+        <input type="password" id="confirmation" autocomplete="new-password" aria-describedby="confirmationInfo">
+        <p id="confirmationInfo" aria-live="polite"></p>
         <br>
         <br>
-        <input type="submit" id="submit" value="Submit">
-    </div>
+        <button type="submit" id="submit">Submit</button>
+    </form>
     <script src="script.js"></script>
 </body>
 
