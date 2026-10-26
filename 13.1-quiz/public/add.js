@@ -6,16 +6,23 @@ const escapeHtml = (text) => {
 
 const getAllSuppliers = async () => {
   const response = await fetch('/api/suppliers');
+  if (!response.ok) throw new Error(`GET /api/suppliers: ${response.status}`);
   const data = await response.json();
   return data;
 }
 
 const selectLoading = async () => {
-  const suppliers = await getAllSuppliers();
   const supplierElement = document.getElementById('supplier');
-  supplierElement.innerHTML = suppliers.map(supplier => `
-    <option value="${supplier.supplierID}">${escapeHtml(supplier.name)}</option>
-  `).join('');
+  try {
+    const suppliers = await getAllSuppliers();
+    supplierElement.innerHTML = suppliers.map(supplier => `
+      <option value="${supplier.supplierID}">${escapeHtml(supplier.name)}</option>
+    `).join('');
+  } catch (error) {
+    console.error(error);
+    // an empty value, so submitting is answered with "fill out all fields"
+    supplierElement.innerHTML = '<option value="">Could not load the suppliers.</option>';
+  }
 }
 
 selectLoading()
