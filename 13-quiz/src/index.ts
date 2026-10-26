@@ -11,16 +11,19 @@ import { requestRoute } from "./requestRoute";
 
 const server = http.createServer();
 
-// make /request route for file data sending to client
-server.on("request", requestRoute);
-
-// index.html for front side
 server.on("request", (req, res) => {
+  // /request route for file data sending to client
+  if (requestRoute(req, res)) return;
+
+  // index.html for front side
   if (req.url === "/") {
     res.writeHead(200, { "Content-Type": "text/html" });
-    res.write(getFileData("static/index.html", false));
+    res.end(getFileData("static/index.html", false));
+    return;
   }
-  res.end();
+
+  res.writeHead(404, { "Content-Type": "text/plain" });
+  res.end("Not found");
 });
 
 const port = process.env.PORT || 3000;
