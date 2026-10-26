@@ -17,7 +17,7 @@ const getFormData = () => {
   document.getElementById("result").innerHTML = `
     <h2>Result</h2>
     <p>Direction: ${directionValue}</p>
-    <p>Is one way: ${isRoundValue ? "Yes" : "No"}</p>
+    <p>Is round way: ${isRoundValue ? "Yes" : "No"}</p>
     <p>Passengers: ${passengersValue}</p>
     <p>Child age: ${childValue} ${((childValue < 2)
     ? "Free"
