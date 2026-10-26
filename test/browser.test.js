@@ -116,3 +116,25 @@ test("6-callbacks-promises: the first 20 todos are listed one per line", async (
   assert.ok(!target.textContent.includes(","));
   window.close();
 });
+
+test("6-callbacks-promises: text from the internet is not parsed as HTML", async () => {
+  const hostile = "<img src=x onerror=alert(1)>";
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async (url) => ({
+      ok: true,
+      json: async () =>
+        String(url).includes("chucknorris")
+          ? { value: hostile }
+          : todos([hostile]),
+    });
+  });
+  const { document } = window;
+
+  await until(() => document.getElementById("fromInternet").textContent.includes("img"));
+  assert.equal(document.querySelector("#fromInternet img"), null);
+
+  document.getElementById("btn3").click();
+  await until(() => document.getElementById("contentFetch").textContent.includes("img"));
+  assert.equal(document.querySelector("#contentFetch img"), null);
+  window.close();
+});
