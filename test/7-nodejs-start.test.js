@@ -49,3 +49,6 @@ test("7-nodejs-start: the offline examples run", async () => {
     await rm(copy, { recursive: true, force: true });
   }
 });
+
+test("7-nodejs-start: 1-http also works when started from another directory", () =>
+  serves({ cwd: "." }));
