@@ -32,3 +32,15 @@ Needs Node.js 18 or newer. In each Node folder (`7.2-task`, `7.3-task-with-db`,
 (`12`, `13`, `13.1`) need `npm run build` before `npm start`, and the ones with
 a database (`7.3`, `13.1`) need MySQL set up first. See the README in each
 folder.
+
+The servers listen on port 3000 (5000 for the first example in
+`7-nodejs-start`); set `PORT` to use another one.
+
+## Tests
+
+`npm install` and `npm test` in the repository root run a smoke test for every
+lesson: the browser lessons are loaded in jsdom, the Node lessons are started
+on a free port. Install the dependencies of each Node folder first. The tests
+that need MySQL (`7.3`, `13.1`, example 6 of `7-nodejs-start`) are skipped when
+nothing listens on port 3306; `DB_PASSWORD` sets the root password they use.
+Needs Node.js 22 or newer.
