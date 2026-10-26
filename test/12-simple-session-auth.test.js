@@ -82,11 +82,17 @@ test("12-simple-session-auth: signing in again changes the session id", async ()
   assert.notEqual(next, first.cookie);
 });
 
-test("12-simple-session-auth: logging out ends the session", async () => {
+test("12-simple-session-auth: logging out is a POST and ends the session", async () => {
   const { cookie } = await signIn("azer");
-  const out = await request("/logout", { cookie });
-  assert.equal(out.headers.get("location"), "/");
 
-  const profile = await request("/profile", { cookie });
-  assert.equal(profile.headers.get("location"), "/login");
+  // a link or an image on another site must not be able to log the user out
+  await request("/logout", { cookie });
+  assert.equal((await request("/profile", { cookie })).status, 200);
+
+  const profile = await (await request("/profile", { cookie })).text();
+  assert.match(profile, /<form method="post" action="\/logout">/);
+
+  const out = await request("/logout", { cookie, form: {} });
+  assert.equal(out.headers.get("location"), "/");
+  assert.equal((await request("/profile", { cookie })).headers.get("location"), "/login");
 });
