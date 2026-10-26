@@ -74,3 +74,30 @@ test("3.2-classwork-flights: the summary names the round way box correctly", asy
   change("isRoundWay", { checked: true });
   assert.match(document.getElementById("result").textContent, /Is round way: Yes/);
 });
+
+const todos = (titles) =>
+  titles.map((title, i) => ({ id: i + 1, title }));
+
+// resolves once `check` passes, polling because the lesson works with timers
+const until = async (check, ms = 5000) => {
+  const deadline = Date.now() + ms;
+  while (!check()) {
+    if (Date.now() > deadline) throw new Error("timed out");
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+};
+
+test("6-callbacks-promises: posts are shown before the internet request starts", async () => {
+  let contentWhenFetched = null;
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async () => {
+      contentWhenFetched = window.document.getElementById("content").innerHTML;
+      return { ok: true, json: async () => todos(["one", "two"]) };
+    };
+  });
+
+  await until(() => contentWhenFetched !== null);
+  assert.match(contentWhenFetched, /Post 3/);
+  assert.match(contentWhenFetched, /World!/);
+  window.close();
+});
