@@ -279,3 +279,24 @@ test("4.2-card-order: the order summary adds up and the name is escaped", async 
   // block content (heading, list, paragraphs) cannot live inside a span
   assert.equal(result.tagName, "DIV");
 });
+
+test("3-javascript-basics: the buttons change the page", async () => {
+  const { window } = await loadPage("3-javascript-basics");
+  const { document } = window;
+  const text = document.getElementById("pTag");
+
+  document.querySelector(".classButton").click();
+  assert.ok(text.classList.contains("mystyle"));
+  document.querySelector(".classButton").click();
+  assert.ok(!text.classList.contains("mystyle"));
+
+  text.click();
+  assert.equal(text.style.background, "green");
+
+  let shown;
+  window.alert = (message) => (shown = message);
+  document.getElementById("input").value = "hello";
+  document.getElementById("get").click();
+  assert.equal(shown, "hello");
+  window.close();
+});
