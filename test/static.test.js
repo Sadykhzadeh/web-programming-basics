@@ -68,3 +68,13 @@ for (const page of pages) {
     assert.ok(document.documentElement.getAttribute("lang"), "no lang on <html>");
   });
 }
+
+test("no lesson stylesheet removes the focus outline", () => {
+  for (const lesson of lessons) {
+    for (const name of readdirSync(join(root, lesson))) {
+      if (!name.endsWith(".css")) continue;
+      const css = readFileSync(join(root, lesson, name), "utf8");
+      assert.doesNotMatch(css, /outline:\s*(none|0)\b/, `${lesson}/${name}`);
+    }
+  }
+});
