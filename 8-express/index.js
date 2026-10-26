@@ -20,6 +20,8 @@ app.use(express.static(path.join(here, "public")));
 // view engine
 app.set("view engine", "hbs");
 app.set("views", path.join(here, "views"));
+// compile each template once instead of reading it from disk on every request
+app.set("view cache", true);
 
 // partials
 hbs.registerPartials(path.join(here, "views"));
