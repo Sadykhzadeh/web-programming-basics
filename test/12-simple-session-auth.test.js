@@ -115,3 +115,13 @@ test("12-simple-session-auth: a broken JSON body gets no stack trace", async () 
   assert.equal(res.status, 302);
   assert.equal(res.headers.get("location"), "/login");
 });
+
+test("12-simple-session-auth: responses carry the basic security headers", async () => {
+  // (Express's own 404 page sets a stricter policy of its own)
+  for (const path of ["/login", "/", "/nope"]) {
+    const res = await request(path);
+    assert.equal(res.headers.get("x-content-type-options"), "nosniff", path);
+    assert.ok(res.headers.get("content-security-policy"), path);
+    assert.equal(res.headers.get("x-powered-by"), null, path);
+  }
+});
