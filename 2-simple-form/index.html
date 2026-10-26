@@ -14,18 +14,16 @@
 
 <body>
   <!-- WITHOUT BOOTSTRAP -->
-  <b>
-    <h1>without bootstrap</h1>
-  </b>
+  <h1>without bootstrap</h1>
   <h1>simple form.</h1>
-  <form action="" method="post">
+  <form method="post">
     <label for="name">Name</label>
     <input id="name" type="text" placeholder="What's your name?" required>
     <label for="surname">Surname</label>
     <input id="surname" type="text" placeholder="What's your surname?" required>
     <br>
     <label for="phone">Phone</label>
-    <input id="phone" type="text" placeholder="What's your phone?" required>
+    <input id="phone" type="tel" placeholder="What's your phone?" required>
     <br>
     <label for="email">Email</label>
     <input id="email" type="email" placeholder="What's your email?" required>
@@ -37,18 +35,17 @@
       <option value="3">Suggestion</option>
     </select>
     <br>
+    <label for="message">Message</label>
     <textarea name="Message" id="message" cols="30" rows="10" placeholder="Enter your message here..."></textarea>
     <br>
     <label for="password">Password</label>
-    <input id="password" type="password" placeholder="Enter your new password" required>
+    <input id="password" type="password" autocomplete="new-password" placeholder="Enter your new password" required>
     <br>
     <button type="submit">Submit</button>
   </form>
   <!-- WITH BOOTSTRAP -->
-  <b>
-    <h1>with bootstrap</h1>
-  </b>
-  <form action="" method="post">
+  <h1>with bootstrap</h1>
+  <form method="post">
     <div class="mb-3">
       <label for="bs-name" class="form-label">Name</label>
       <input type="text" class="form-control" id="bs-name" placeholder="What's your name?" required>
@@ -59,7 +56,7 @@
     </div>
     <div class="mb-3">
       <label for="bs-phone" class="form-label">Phone</label>
-      <input type="text" class="form-control" id="bs-phone" placeholder="What's your phone?" required>
+      <input type="tel" class="form-control" id="bs-phone" placeholder="What's your phone?" required>
     </div>
     <div class="mb-3">
       <label for="bs-email" class="form-label">Email</label>
@@ -79,7 +76,7 @@
     </div>
     <div class="mb-3">
       <label for="bs-password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="bs-password" placeholder="Enter your new password" required>
+      <input type="password" class="form-control" id="bs-password" autocomplete="new-password" placeholder="Enter your new password" required>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
