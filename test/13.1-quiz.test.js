@@ -101,3 +101,9 @@ test("13.1-quiz: adds a product and rejects incomplete ones", { skip }, async ()
     await db.end();
   }
 });
+
+test("13.1-quiz: a supplier that does not exist is a 400, not a server error", { skip }, async () => {
+  const { res, body } = await post({ ...product, supplierID: "999" });
+  assert.equal(res.status, 400);
+  assert.match(body.message, /supplier/i);
+});
