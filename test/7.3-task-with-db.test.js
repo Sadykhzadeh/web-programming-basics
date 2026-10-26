@@ -92,3 +92,17 @@ test("7.3-task-with-db: without a usable database the page answers 500", async (
     await lonely.stop();
   }
 });
+
+test("7.3-task-with-db: responses carry the basic security headers", async () => {
+  const lonely = await startServer(lesson, ["index.js"], {
+    env: { DB_PASSWORD: "not-the-password" },
+  });
+  try {
+    const res = await fetch(lonely.base);
+    assert.equal(res.headers.get("x-content-type-options"), "nosniff");
+    assert.match(res.headers.get("content-security-policy"), /default-src 'none'/);
+    assert.equal(res.headers.get("x-powered-by"), null);
+  } finally {
+    await lonely.stop();
+  }
+});
