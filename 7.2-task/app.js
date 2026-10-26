@@ -51,7 +51,7 @@ const realTimeScript = `<script>
         function search() {
           let input = document.getElementById('search').value;
           let x = document.getElementsByTagName('tr');
-          for (i = 0; i < x.length; i++) {
+          for (let i = 0; i < x.length; i++) {
             if (!x[i].innerHTML.toLowerCase().includes(input.toLowerCase())) {
               x[i].style.display = 'none';
             } else {
