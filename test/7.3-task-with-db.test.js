@@ -76,3 +76,17 @@ test("7.3-task-with-db: a failed query answers 500 and does not leave connection
     await db.end();
   }
 });
+
+// runs everywhere, the other tests need a database
+test("7.3-task-with-db: without a usable database the page answers 500", async () => {
+  const lonely = await startServer(lesson, ["index.js"], {
+    env: { DB_PASSWORD: "not-the-password" },
+  });
+  try {
+    const res = await fetch(lonely.base);
+    assert.equal(res.status, 500);
+    assert.equal(await res.text(), "Database error");
+  } finally {
+    await lonely.stop();
+  }
+});
