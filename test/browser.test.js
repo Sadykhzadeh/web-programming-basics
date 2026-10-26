@@ -207,3 +207,34 @@ test("6.2-classwork-continents: a missing data file shows a message", async () =
   assert.equal(window.document.getElementById("content").textContent, "Could not load countries.");
   window.close();
 });
+
+const feed = (name, url) => ({
+  name,
+  location: "Somewhere",
+  multiMedia: [{ url }],
+  likeDislike: { likes: 1, dislikes: 2 },
+});
+
+test("13-quiz: only real web addresses become links", async () => {
+  const records = [
+    feed("with https", "https://example.com/a?x=1&y=2"),
+    feed("without a link", null),
+    feed("relative path", "feedsmedia/1/photo.jpg"),
+    feed("embed code", '<iframe src="https://example.com/embed"></iframe>'),
+    feed('quote " breaker', 'https://example.com/" onmouseover="alert(1)'),
+  ];
+  const { window } = await loadPage("13-quiz", (window) => {
+    window.fetch = async () => ({ json: async () => records });
+  }, "static/index.html");
+  const { document } = window;
+
+  await until(() => document.querySelectorAll(".objectBox").length === records.length);
+  const links = [...document.querySelectorAll(".objectBox a")];
+  assert.deepEqual(links.map((a) => a.getAttribute("href")), [
+    "https://example.com/a?x=1&y=2",
+    'https://example.com/" onmouseover="alert(1)',
+  ]);
+  assert.equal(document.querySelectorAll("[onmouseover]").length, 0);
+  assert.equal(document.querySelector(".objectBox iframe"), null);
+  window.close();
+});
