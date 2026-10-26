@@ -40,3 +40,17 @@ test("13-quiz: unknown paths answer 404, not an empty page", async () => {
     assert.equal(res.status, 404, path);
   }
 });
+
+test("13-quiz: without a limit every record comes back", async () => {
+  assert.equal((await records("")).body.length, 500);
+  assert.equal((await records("other=1")).body.length, 500);
+  assert.equal((await records("limit=100000")).body.length, 500);
+});
+
+test("13-quiz: a limit that is not a number is a 400", async () => {
+  for (const limit of ["abc", "-1", "1.5"]) {
+    const { res, body } = await records(`limit=${limit}`);
+    assert.equal(res.status, 400, limit);
+    assert.ok(body.error);
+  }
+});
