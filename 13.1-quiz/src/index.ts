@@ -32,13 +32,18 @@ app.get("/api/suppliers/:id", handle(async (req, res) => {
 app.post("/api/suppliers", handle(async (req, res) => {
   const { productCode, name, price, quantity, supplierID } = req.body;
 
+  // Number(null) and Number([]) are 0, so only a number or a non-empty string
+  // counts as a value
+  const given = (value) =>
+    (typeof value === "string" || typeof value === "number") && value !== "";
+
   // all fields are required (see task.txt), match the column types of db.sql
   const valid =
     typeof productCode === "string" && productCode.length === 3 &&
     typeof name === "string" && name.trim() !== "" && name.length <= 30 &&
-    price !== "" && Number(price) >= 0 && Number(price) < 100000 &&
-    quantity !== "" && Number.isInteger(Number(quantity)) && Number(quantity) >= 0 &&
-    Number.isInteger(Number(supplierID)) && Number(supplierID) > 0;
+    given(price) && Number(price) >= 0 && Number(price) < 100000 &&
+    given(quantity) && Number.isInteger(Number(quantity)) && Number(quantity) >= 0 &&
+    given(supplierID) && Number.isInteger(Number(supplierID)) && Number(supplierID) > 0;
   if (!valid) {
     res.status(400).send({ message: "All fields should be filled out!" });
     return;
