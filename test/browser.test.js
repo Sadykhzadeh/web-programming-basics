@@ -357,3 +357,13 @@ test("6-callbacks-promises: the joke box is a button, so the keyboard can reach 
   assert.equal(window.document.getElementById("chuckNorris").tagName, "BUTTON");
   window.close();
 });
+
+test("6-callbacks-promises: every box that is filled in later is announced", async () => {
+  const { window } = await loadPage("6-callbacks-promises", (window) => {
+    window.fetch = async () => ({ ok: true, json: async () => [] });
+  });
+  for (const id of ["content", "fromInternet", "qqqq", "qqqqq", "qqqqqq", "contentFetch"]) {
+    assert.equal(window.document.getElementById(id).getAttribute("aria-live"), "polite", id);
+  }
+  window.close();
+});
