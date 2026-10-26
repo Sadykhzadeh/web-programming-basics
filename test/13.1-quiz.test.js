@@ -77,7 +77,7 @@ test("13.1-quiz: adds a product and rejects incomplete ones", { skip }, async ()
   const db = await admin();
   try {
     const added = await post(product);
-    assert.ok(added.res.ok);
+    assert.equal(added.res.status, 201);
     const [rows] = await db.query("select * from testOne.products where productCode = 'TST'");
     assert.equal(rows.length, 1);
 

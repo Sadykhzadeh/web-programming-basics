@@ -51,7 +51,7 @@ app.post("/api/suppliers", handle(async (req, res) => {
 
   try {
     const [rows] = await pool.query("INSERT INTO products (productCode, name, price, quantity, supplierID) VALUES (?, ?, ?, ?, ?)", [productCode, name, price, quantity, supplierID]);
-    res.send(rows);
+    res.status(201).send(rows);
   } catch (error) {
     // the foreign key to suppliers failed: the client sent a bad supplier
     if ((error as { code?: string }).code === "ER_NO_REFERENCED_ROW_2") {
