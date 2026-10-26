@@ -94,7 +94,7 @@ const server = http.createServer(async (req, res) => {
     res.end("Could not read the users");
     return;
   }
-  res.writeHead(200, { "Content-Type": "text/html" });
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
   // style table
   res.write(`<h1>Users</h1>${style}${readlTimeInput}`);
   res.write(
