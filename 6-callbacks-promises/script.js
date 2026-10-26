@@ -14,19 +14,25 @@ let posts = [
     },
   ],
   beautifyPost = ({ title, body }) => `<h3>${title}</h3><p>${body}</p><br>`,
+  // text that comes from files and APIs must not be parsed as HTML
+  escapeHtml = (text) => {
+    const el = document.createElement("div");
+    el.textContent = text;
+    return el.innerHTML;
+  },
   pasteContent = (docStr, str) => {
     document.getElementById(docStr).innerHTML = `${str}`;
   },
   customerBeutify = (customer) => `
             <ul>
-                <li>ID: ${customer.id}</li>
-                <li>Name: ${customer.name}</li>
-                <li>Phone: ${customer.phone}</li>
-                <li>Address: ${customer.address}</li>
-                <li>City: ${customer.city}</li>
-                <li>State: ${customer.state}</li>
-                <li>Zip: ${customer.zip}</li>
-                <li>Country: ${customer.country}</li>
+                <li>ID: ${escapeHtml(customer.id)}</li>
+                <li>Name: ${escapeHtml(customer.name)}</li>
+                <li>Phone: ${escapeHtml(customer.phone)}</li>
+                <li>Address: ${escapeHtml(customer.address)}</li>
+                <li>City: ${escapeHtml(customer.city)}</li>
+                <li>State: ${escapeHtml(customer.state)}</li>
+                <li>Zip: ${escapeHtml(customer.zip)}</li>
+                <li>Country: ${escapeHtml(customer.country)}</li>
             </ul>
             `;
 
@@ -99,7 +105,7 @@ const fetchDataFromInternet = async () => {
     const q = await res.json();
     pasteContent(
       "fromInternet",
-      q.filter((x, i) => i < 20).map((x) => `${x.id} ${x.title}<br>`)
+      q.filter((x, i) => i < 20).map((x) => `${x.id} ${escapeHtml(x.title)}<br>`)
         .join(""),
     );
     // console.log(q);
@@ -152,7 +158,7 @@ document.getElementById("chuckNorris").addEventListener("click", () => {
   xhr.open("GET", "https://api.chucknorris.io/jokes/random", true);
   xhr.onload = function () {
     const joke = JSON.parse(this.responseText);
-    pasteContent("chuckNorris", joke.value);
+    pasteContent("chuckNorris", escapeHtml(joke.value));
   };
   xhr.send();
 });
@@ -180,5 +186,5 @@ document.getElementById("btn2").addEventListener("click", () => {
 document.getElementById("btn3").addEventListener("click", () => {
   fetch("https://api.chucknorris.io/jokes/random")
     .then((res) => res.json())
-    .then((data) => pasteContent("contentFetch", data.value));
+    .then((data) => pasteContent("contentFetch", escapeHtml(data.value)));
 });
