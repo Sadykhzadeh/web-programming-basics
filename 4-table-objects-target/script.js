@@ -55,14 +55,14 @@ const footballCommands = {
 
 const generateFootballTable = (footballCommands) => `
   <table>
-    <head>
+    <thead>
       <tr>
         <th>ID</th>
         <th>Command Name</th>
         <th>Points</th>
         <th>Average</th>
       </tr>
-    </head>
+    </thead>
     ${
   Object.keys(footballCommands).map((id, cnt) => `
       <tr>
