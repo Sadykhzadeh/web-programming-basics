@@ -423,3 +423,30 @@ test("13.1-quiz: the add form is submitted as a form and checked by the browser 
   });
   window.close();
 });
+
+test("13.1-quiz: each supplier button has its own name and loads that supplier's products", async () => {
+  const requested = [];
+  const { window } = await loadPage("13.1-quiz", (window) => {
+    window.fetch = async (url) => {
+      requested.push(url);
+      return {
+        ok: true,
+        json: async () =>
+          url === "/api/suppliers"
+            ? [{ supplierID: 1, name: 'A "quoted" <b>', phone: "1" }, { supplierID: 2, name: "B", phone: "2" }]
+            : [{ name: "Pen", price: "1.00" }],
+      };
+    };
+  }, "public/index.html");
+  const { document } = window;
+  await until(() => document.querySelectorAll("#suppliers button").length === 2);
+
+  const buttons = [...document.querySelectorAll("#suppliers button")];
+  assert.equal(buttons[0].getAttribute("aria-label"), 'View products of A "quoted" <b>');
+  assert.equal(document.querySelector("#suppliers b"), null);
+
+  buttons[1].click();
+  await until(() => document.getElementById("supplier-2").textContent.includes("Pen"));
+  assert.ok(requested.includes("/api/suppliers/2"));
+  window.close();
+});

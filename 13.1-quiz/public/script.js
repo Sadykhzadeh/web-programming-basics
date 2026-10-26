@@ -1,7 +1,8 @@
 const escapeHtml = (text) => {
     const el = document.createElement('div');
     el.textContent = text;
-    return el.innerHTML;
+    // also quotes, the text is used inside attributes too
+    return el.innerHTML.replace(/"/g, '&quot;');
 };
 
 const getAllSuppliers = async () => {
@@ -19,7 +20,7 @@ const outputSuppliers = async () => {
             <div class="supplier">
                 <h3>${escapeHtml(supplier.name)}</h3>
                 <p>${escapeHtml(supplier.phone)}</p>
-                <button onclick="outputSupplierProducts(${supplier.supplierID})">View Products</button>
+                <button data-supplier="${Number(supplier.supplierID)}" aria-label="View products of ${escapeHtml(supplier.name)}">View Products</button>
                 <div class="products" id="supplier-${supplier.supplierID}"></div>
             </div>
             <hr>
@@ -30,6 +31,12 @@ const outputSuppliers = async () => {
     }
 }
 outputSuppliers();
+
+// one listener for all buttons instead of an onclick attribute per supplier
+document.getElementById('suppliers').addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-supplier]');
+    if (button) outputSupplierProducts(button.dataset.supplier);
+});
 
 const getSupplierProducts = async (id) => {
     const response = await fetch(`/api/suppliers/${id}`);
