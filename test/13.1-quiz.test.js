@@ -139,3 +139,20 @@ test("13.1-quiz: pages load and the API answers 500 without a usable database", 
     await lonely.stop();
   }
 });
+
+test("13.1-quiz: responses carry the basic security headers", async () => {
+  await build(lesson);
+  const lonely = await startServer(lesson, ["dist/index.js"], {
+    env: { DB_PASSWORD: "not-the-password" },
+  });
+  try {
+    for (const path of ["/", "/add", "/api/suppliers"]) {
+      const res = await fetch(lonely.base + path);
+      assert.equal(res.headers.get("x-content-type-options"), "nosniff", path);
+      assert.match(res.headers.get("content-security-policy"), /frame-ancestors 'none'/, path);
+      assert.equal(res.headers.get("x-powered-by"), null, path);
+    }
+  } finally {
+    await lonely.stop();
+  }
+});

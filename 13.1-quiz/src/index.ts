@@ -4,6 +4,19 @@ import path from "path";
 import { pool } from './connectDB';
 
 const app = express();
+// Basic response headers. No scripts or frames from elsewhere, the browser
+// must not guess content types, and the framework name is nobody's business.
+app.disable("x-powered-by");
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.set({
+    "Content-Security-Policy":
+      "default-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+  });
+  next();
+});
+
 // the public folder is next to src and dist, wherever the server is started from
 const publicDir = path.join(__dirname, "..", "public");
 app.use(express.json());
