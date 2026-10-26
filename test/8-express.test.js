@@ -18,6 +18,7 @@ test("8-express: pages are rendered from the templates", async () => {
   const html = await home.text();
   assert.match(html, /Hello, my name is John Doe/);
   assert.match(html, /Express \+ HBS/);
+  assert.match(html, /<img [^>]*alt="[^"]{20,}"/);
 
   assert.match(await (await get("/about")).text(), /About!/);
   assert.match(await (await get("/contact")).text(), /Contact!/);
