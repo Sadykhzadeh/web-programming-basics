@@ -70,7 +70,13 @@ const escapeHtml = (value) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const server = http.createServer(async (__req, res) => {
+const server = http.createServer(async (req, res) => {
+  // browsers also ask for /favicon.ico, which must not start another download
+  if (req.url !== "/") {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not found");
+    return;
+  }
   // wait for the file to be written before reading it back
   try {
     await grabData();
