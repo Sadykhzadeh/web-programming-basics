@@ -23,7 +23,7 @@ app.get("/api/suppliers/:id", async (req: Request, res: Response) => {
 });
 
 app.post("/api/suppliers", async (req: Request, res: Response) => {
-  const { productCode, name, price, quantity, supplierID } = req.body;
+  const { productCode, name, price, quantity, supplierID } = req.body ?? {};
 
   // Number(null) and Number([]) are 0, so only a number or a non-empty string
   // counts as a value
