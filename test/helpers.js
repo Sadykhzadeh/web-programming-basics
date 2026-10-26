@@ -1,8 +1,9 @@
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { once } from "node:events";
 import { connect, createServer } from "node:net";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
+import { promisify } from "node:util";
 import { JSDOM } from "jsdom";
 
 export const root = fileURLToPath(new URL("..", import.meta.url));
@@ -87,3 +88,12 @@ export const mysqlUp = () =>
     socket.once("error", () => resolve(false));
     socket.once("close", () => resolve(false));
   });
+
+// Compiles a TypeScript lesson into its dist folder, so the test always runs
+// the current sources (needs `npm ci` in the lesson first).
+export const build = (lesson) =>
+  promisify(execFile)(
+    process.execPath,
+    [join(root, lesson, "node_modules/typescript/bin/tsc")],
+    { cwd: join(root, lesson) },
+  );
