@@ -2,3 +2,5 @@ node_modules/
 
 #macOS dump files
 .DS_Store
+# written by 5-file-system.js
+for-fs-new.json
