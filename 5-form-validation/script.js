@@ -33,7 +33,7 @@ const validatePassword = {
       console.log("Password length is accepted.");
     } else {
       passInfo.innerHTML +=
-        "Password must be at least 8 and at most 16 characters long!";
+        "Password must be at least 8 and at most 16 characters long!<br>";
     }
   },
 
@@ -43,7 +43,7 @@ const validatePassword = {
       console.log("Password has at least one lowercase letter.");
     } else {
       passInfo.innerHTML +=
-        "Password must contain at least one lowercase letter!";
+        "Password must contain at least one lowercase letter!<br>";
     }
   },
 
@@ -53,7 +53,7 @@ const validatePassword = {
       console.log("Password has at least one uppercase letter.");
     } else {
       passInfo.innerHTML +=
-        "Password must contain at least one uppercase letter!";
+        "Password must contain at least one uppercase letter!<br>";
     }
   },
 
@@ -61,7 +61,7 @@ const validatePassword = {
     if (/[0-9]/.test(pass.value)) {
       console.log("Password has a number.");
     } else {
-      passInfo.innerHTML += "\nPassword must contain at least one number!";
+      passInfo.innerHTML += "Password must contain at least one number!<br>";
     }
   },
 };
