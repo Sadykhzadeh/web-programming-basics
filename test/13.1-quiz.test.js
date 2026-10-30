@@ -102,6 +102,19 @@ test("13.1-quiz: adds a product and rejects incomplete ones", { skip }, async ()
   }
 });
 
+test("13.1-quiz: stores the largest values the columns hold", { skip }, async () => {
+  const db = await admin();
+  try {
+    const { res } = await post({ ...product, productCode: "MAX", price: "99999.99", quantity: "4294967295" });
+    assert.equal(res.status, 201);
+    const [rows] = await db.query("select price, quantity from testOne.products where productCode = 'MAX'");
+    assert.deepEqual(rows, [{ price: "99999.99", quantity: 4294967295 }]);
+  } finally {
+    await db.query("delete from testOne.products where productCode = 'MAX'");
+    await db.end();
+  }
+});
+
 test("13.1-quiz: a supplier that does not exist is a 400, not a server error", { skip }, async () => {
   const { res, body } = await post({ ...product, supplierID: "999" });
   assert.equal(res.status, 400);
@@ -135,6 +148,35 @@ test("13.1-quiz: pages load and the API answers 500 without a usable database", 
     const empty = await fetch(lonely.base + "/api/suppliers", { method: "POST" });
     assert.equal(empty.status, 400);
     assert.match((await empty.json()).message, /filled out/);
+  } finally {
+    await lonely.stop();
+  }
+});
+
+// runs everywhere too: a value the column cannot hold is answered before the
+// database is asked, so it is a 400 here and not the 500 of a failed insert
+test("13.1-quiz: rejects values the columns cannot hold", async () => {
+  await build(lesson);
+  const lonely = await startServer(lesson, ["dist/index.js"], {
+    env: { DB_PASSWORD: "not-the-password" },
+  });
+  try {
+    for (const bad of [
+      { ...product, price: "99999.999" }, // rounds to 100000.00 in DECIMAL(7,2)
+      { ...product, price: " " },
+      { ...product, quantity: "4294967296" }, // INT UNSIGNED ends at 4294967295
+      { ...product, quantity: " " },
+      { ...product, supplierID: "4294967296" },
+      { ...product, supplierID: " " },
+    ]) {
+      const res = await fetch(lonely.base + "/api/suppliers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bad),
+      });
+      assert.equal(res.status, 400, JSON.stringify(bad));
+      assert.match((await res.json()).message, /filled out/);
+    }
   } finally {
     await lonely.stop();
   }
