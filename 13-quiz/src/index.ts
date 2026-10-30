@@ -19,7 +19,7 @@ server.on("request", (req, res) => {
   if (requestRoute(req, res)) return;
 
   // index.html for front side
-  if (req.url === "/") {
+  if (req.url?.split("?")[0] === "/") {
     res.writeHead(200, { "Content-Type": "text/html" });
     res.end(indexHtml);
     return;

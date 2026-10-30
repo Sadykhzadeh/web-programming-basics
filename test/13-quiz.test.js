@@ -54,3 +54,9 @@ test("13-quiz: a limit that is not a number is a 400", async () => {
     assert.ok(body.error);
   }
 });
+
+test("13-quiz: the front page is also served with a query string", async () => {
+  const res = await fetch(server.base + "/?utm_source=lesson");
+  assert.equal(res.status, 200);
+  assert.match(await res.text(), /<title>Records<\/title>/);
+});
