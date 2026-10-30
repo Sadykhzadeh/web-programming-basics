@@ -114,3 +114,16 @@ test("7.2-task: the search box hides the other users but keeps the header", asyn
   search.dispatchEvent(new window.Event("input"));
   assert.equal(visible().length, users.length + 1);
 });
+
+test("7.2-task: the search looks at the text of a row, not at its markup", async () => {
+  const html = await (await fetch(server.base)).text();
+  const { window } = new JSDOM(html, { runScripts: "dangerously" });
+  const { document } = window;
+  const search = document.getElementById("search");
+
+  // "<td" is in the markup of every row and in the name of none
+  search.value = "<td";
+  search.dispatchEvent(new window.Event("input"));
+  const shown = [...document.querySelectorAll("tbody tr")].filter((tr) => tr.style.display !== "none");
+  assert.equal(shown.length, 0);
+});

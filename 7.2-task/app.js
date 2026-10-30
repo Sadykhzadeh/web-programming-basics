@@ -53,7 +53,7 @@ const realTimeScript = `<script>
           // only the users, the header row stays
           let x = document.querySelectorAll('tbody tr');
           for (let i = 0; i < x.length; i++) {
-            if (!x[i].innerHTML.toLowerCase().includes(input.toLowerCase())) {
+            if (!x[i].textContent.toLowerCase().includes(input.toLowerCase())) {
               x[i].style.display = 'none';
             } else {
               x[i].style.display = '';
