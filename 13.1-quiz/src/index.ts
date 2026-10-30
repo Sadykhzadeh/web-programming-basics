@@ -38,18 +38,20 @@ app.get("/api/suppliers/:id", async (req: Request, res: Response) => {
 app.post("/api/suppliers", async (req: Request, res: Response) => {
   const { productCode, name, price, quantity, supplierID } = req.body ?? {};
 
-  // Number(null) and Number([]) are 0, so only a number or a non-empty string
-  // counts as a value
+  // Number(null), Number([]) and Number(" ") are 0, so only a number or a
+  // string with something in it counts as a value
   const given = (value: unknown) =>
-    (typeof value === "string" || typeof value === "number") && value !== "";
+    typeof value === "number" || (typeof value === "string" && value.trim() !== "");
 
   // all fields are required (see task.txt), match the column types of db.sql
   const valid =
     typeof productCode === "string" && productCode.length === 3 &&
     typeof name === "string" && name.trim() !== "" && name.length <= 30 &&
-    given(price) && Number(price) >= 0 && Number(price) < 100000 &&
-    given(quantity) && Number.isInteger(Number(quantity)) && Number(quantity) >= 0 &&
-    given(supplierID) && Number.isInteger(Number(supplierID)) && Number(supplierID) > 0;
+    // price is DECIMAL(7,2), so what would round up to 100000.00 does not fit; quantity
+    // and supplierID are INT UNSIGNED
+    given(price) && Number(price) >= 0 && Number(price) < 99999.995 &&
+    given(quantity) && Number.isInteger(Number(quantity)) && Number(quantity) >= 0 && Number(quantity) <= 4294967295 &&
+    given(supplierID) && Number.isInteger(Number(supplierID)) && Number(supplierID) > 0 && Number(supplierID) <= 4294967295;
   if (!valid) {
     res.status(400).send({ message: "All fields should be filled out!" });
     return;
