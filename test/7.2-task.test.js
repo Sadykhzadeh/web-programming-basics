@@ -127,3 +127,9 @@ test("7.2-task: the search looks at the text of a row, not at its markup", async
   const shown = [...document.querySelectorAll("tbody tr")].filter((tr) => tr.style.display !== "none");
   assert.equal(shown.length, 0);
 });
+
+test("7.2-task: the front page is also served with a query string", async () => {
+  const res = await fetch(server.base + "/?search=lean");
+  assert.equal(res.status, 200);
+  assert.match(await res.text(), /<h1>Users<\/h1>/);
+});

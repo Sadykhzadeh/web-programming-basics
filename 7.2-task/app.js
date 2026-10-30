@@ -72,8 +72,9 @@ const escapeHtml = (value) =>
     .replace(/'/g, "&#39;");
 
 const server = http.createServer(async (req, res) => {
-  // browsers also ask for /favicon.ico, which must not start another download
-  if (req.url !== "/") {
+  // browsers also ask for /favicon.ico, which must not start another download;
+  // a query string does not change the page
+  if (req.url.split("?")[0] !== "/") {
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("Not found");
     return;
