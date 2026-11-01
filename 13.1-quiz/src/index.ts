@@ -38,10 +38,11 @@ app.get("/api/suppliers/:id", async (req: Request, res: Response) => {
 app.post("/api/suppliers", async (req: Request, res: Response) => {
   const { productCode, name, price, quantity, supplierID } = req.body ?? {};
 
-  // Number(null), Number([]) and Number(" ") are 0, so only a number or a
-  // string with something in it counts as a value
+  // Number(null), Number([]) and Number(" ") are 0, and Number("0x10") is 16
+  // which MySQL refuses, so only a number or a decimal numeral counts as a value
   const given = (value: unknown) =>
-    typeof value === "number" || (typeof value === "string" && value.trim() !== "");
+    typeof value === "number" ||
+    (typeof value === "string" && /^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(value.trim()));
 
   // all fields are required (see task.txt), match the column types of db.sql
   const valid =

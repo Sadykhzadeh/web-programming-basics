@@ -168,6 +168,11 @@ test("13.1-quiz: rejects values the columns cannot hold", async () => {
       { ...product, quantity: " " },
       { ...product, supplierID: "4294967296" },
       { ...product, supplierID: " " },
+      // Number() reads these, MySQL does not
+      { ...product, price: "0x10" },
+      { ...product, price: "0b11" },
+      { ...product, quantity: "0x10" },
+      { ...product, supplierID: "0x1" },
     ]) {
       const res = await fetch(lonely.base + "/api/suppliers", {
         method: "POST",
