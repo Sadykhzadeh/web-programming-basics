@@ -424,6 +424,15 @@ test("13.1-quiz: the add form is submitted as a form and checked by the browser 
   window.close();
 });
 
+test("13.1-quiz: the add form stops typing at the length the columns hold", async () => {
+  const { window } = await loadPage("13.1-quiz", (window) => {
+    window.fetch = async () => ({ ok: true, json: async () => [] });
+  }, "public/add.html");
+  // the server answers 400 for a longer name, VARCHAR(30) in db.sql
+  assert.equal(window.document.getElementById("name").maxLength, 30);
+  window.close();
+});
+
 test("13.1-quiz: each supplier button has its own name and loads that supplier's products", async () => {
   const requested = [];
   const { window } = await loadPage("13.1-quiz", (window) => {
