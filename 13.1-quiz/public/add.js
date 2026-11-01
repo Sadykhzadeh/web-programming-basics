@@ -35,26 +35,32 @@ const submitForm = async (event) => {
   const quantity = document.getElementById('quantity').value;
   const supplierID = document.getElementById('supplier').value;
 
-  const response = await fetch('/api/suppliers', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      productCode,
-      name,
-      price,
-      quantity,
-      supplierID,
-    })
-  });
+  try {
+    const response = await fetch('/api/suppliers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productCode,
+        name,
+        price,
+        quantity,
+        supplierID,
+      })
+    });
 
-  const data = await response.json();
-  if (response.ok && !data.warningStatus) {
-    alert("Product added successfully");
-    window.location.href = '/';
-  } else {
-    alert(data.message || "Error adding product");
+    const data = await response.json();
+    if (response.ok && !data.warningStatus) {
+      alert("Product added successfully");
+      window.location.href = '/';
+    } else {
+      alert(data.message || "Error adding product");
+    }
+  } catch (error) {
+    // no connection, or an answer that is not JSON
+    console.error(error);
+    alert("Error adding product");
   }
 }
 

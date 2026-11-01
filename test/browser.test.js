@@ -424,6 +424,30 @@ test("13.1-quiz: the add form is submitted as a form and checked by the browser 
   window.close();
 });
 
+test("13.1-quiz: the add form says so when the server cannot be reached or answers with a page", async () => {
+  for (const post of [
+    async () => { throw new TypeError("Failed to fetch"); },
+    async () => ({ ok: false, status: 502, json: async () => { throw new SyntaxError("Unexpected token <"); } }),
+  ]) {
+    const alerts = [];
+    const { window } = await loadPage("13.1-quiz", (window) => {
+      window.alert = (text) => alerts.push(text);
+      window.fetch = (url, init) =>
+        init?.method === "POST" ? post() : Promise.resolve({ ok: true, json: async () => [{ supplierID: 7, name: "ABC" }] });
+    }, "public/add.html");
+    const { document } = window;
+    await until(() => document.querySelector("#supplier option"));
+    document.getElementById("productCode").value = "ABC";
+    document.getElementById("name").value = "Pen";
+    document.getElementById("price").value = "1.5";
+    document.getElementById("quantity").value = "4";
+    document.getElementById("form").requestSubmit();
+    await until(() => alerts.length === 1);
+    assert.equal(alerts[0], "Error adding product");
+    window.close();
+  }
+});
+
 test("13.1-quiz: the add form stops typing at the length the columns hold", async () => {
   const { window } = await loadPage("13.1-quiz", (window) => {
     window.fetch = async () => ({ ok: true, json: async () => [] });
